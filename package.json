@@ -1,0 +1,36 @@
+{
+  "name": "el-internacional",
+  "version": "1.0.0",
+  "description": "Restaurantes Online",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nclaros97/ElInternacional.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongoose",
+    "bootstrap",
+    "MVC",
+    "Online"
+  ],
+  "author": "Equipo5",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nclaros97/ElInternacional/issues"
+  },
+  "homepage": "https://github.com/nclaros97/ElInternacional#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "mongoose": "^5.10.10"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
