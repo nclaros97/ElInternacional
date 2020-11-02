@@ -8,8 +8,8 @@ const year = new Date().getFullYear();
 // Cargar el formulario de la creación de una cuenta de usuario
 exports.formularioCrearCuenta = (req, res, next) => {
   res.render("autenticacion/registrarse", {
-    title: "Registrarse",
     layout: "auth",
+    title: "Crear Cuenta",
     typePage: "register-page",
     signButtonValue: "/iniciar-sesion",
     signButtonText: "Iniciar sesión",
@@ -51,11 +51,11 @@ exports.crearCuenta = async (req, res, next) => {
       });
 
       // Mostrar un mensaje
-      messages.messages.push({
+      messages.push({
         message: "!Usuario creado satisfactoriamente!",
         alertType: "success",
       });
-      req.flash("error", messages);
+      req.flash("messages", messages);
 
       res.redirect("/iniciar-sesion");
     } catch (error) {
@@ -68,11 +68,11 @@ exports.crearCuenta = async (req, res, next) => {
 exports.formularioIniciarSesion = (req, res, next) => {
   res.render("autenticacion/iniciarSesion", {
     layout: "auth",
+    title: "Login",
     typePage: "login-page",
     signButtonValue: "/crear-cuenta",
     signButtonText: "Regístrate",
     year,
-    title:"Login",
     messages: req.flash(),
   });
 };
