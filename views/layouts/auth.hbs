@@ -15,55 +15,62 @@
   <script src="https://kit.fontawesome.com/d7bc68b35c.js" crossorigin="anonymous"></script>
   {{!-- Estilo personalizado --}}
   {{!-- <link href="/css/custom-styles.min.css?v=2.3.1" rel="stylesheet"> --}}
-  <title>Bienvenido a El Internacional</title>
+  <title>{{title}} - El Internacional</title>
 </head>
 
-<body class="{{typePage}} full-screen sidebar-collapse">
-  {{!-- Navbar --}}
-  <nav class="navbar navbar-expand-lg bg-white fixed-top nav-down navbar-transparent" color-on-scroll="500">
-    <div class="container">
-      <div class="navbar-translate">
-        <a class="navbar-brand" href="/" rel="tooltip" title="El Internacional" data-placement="bottom">
-          El Internacional
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-          aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-bar bar1"></span>
-          <span class="navbar-toggler-bar bar2"></span>
-          <span class="navbar-toggler-bar bar3"></span>
-        </button>
+<body>
+
+  <header>
+      {{!-- Navbar --}}
+    <nav class="navbar navbar-expand-lg bg-white navbar-transparent" color-on-scroll="500">
+      <div class="container">
+        <div class="navbar-translate">
+          <a class="navbar-brand" href="/" rel="tooltip" title="El Internacional" data-placement="bottom">
+            El Internacional
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar bar1"></span>
+            <span class="navbar-toggler-bar bar2"></span>
+            <span class="navbar-toggler-bar bar3"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse" data-nav-image="../assets/img/blurred-image-1.jpg" data-color="orange">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="btn btn-round btn-danger" href="{{signButtonValue}}">
+                {{signButtonText}}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" rel="tooltip" title="Síguenos en Twitter" data-placement="bottom"
+                href="https://twitter.com/" target="_blank">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" rel="tooltip" title="Danos like en Facebook" data-placement="bottom"
+                href="https://www.facebook.com/" target="_blank">
+                <i class="fab fa-facebook-square"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" rel="tooltip" title="Síguenos en Instagram" data-placement="bottom"
+                href="https://www.instagram.com/" target="_blank">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="collapse navbar-collapse" data-nav-image="../assets/img/blurred-image-1.jpg" data-color="orange">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="btn btn-round btn-danger" href="{{signButtonValue}}">
-              {{signButtonText}}
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Síguenos en Twitter" data-placement="bottom"
-              href="https://twitter.com/" target="_blank">
-              <i class="fab fa-twitter"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Danos like en Facebook" data-placement="bottom"
-              href="https://www.facebook.com/" target="_blank">
-              <i class="fab fa-facebook-square"></i>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Síguenos en Instagram" data-placement="bottom"
-              href="https://www.instagram.com/" target="_blank">
-              <i class="fab fa-instagram"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
+
   {{!-- Contenido principal --}}
-  {{{body}}}
+   <div class="container-fluid">
+     {{{body}}}
+   </div>
+  
 
   {{!-- Scripts requeridos por Bootstrap --}}
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -75,6 +82,10 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
     integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
     crossorigin="anonymous"></script>
+
+        <div class="demo-footer text-center">
+      <h6>&copy; {{year}}, UNICAH <i class="fa fa-heart heart"></i> Seminario de Software</h6>
+    </div>
 </body>
 
 </html>
