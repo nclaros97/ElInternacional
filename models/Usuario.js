@@ -69,8 +69,11 @@ usuarioSchema.pre("save", function (next) {
 
 // Hooks para acceder a los errores de MongoDB (unique key)
 usuarioSchema.post("save", function (err, doc, next) {
+  console.log(next);
+  console.log(doc);
   // Verificar si ocurrió un error al momento de almacenar
   if (err.name === "MongoError" && err.code === 11000) {
+    console.log(err);
     next(
       "¡Ya existe un usuario con la dirección de correo electrónico ingresada!"
     );
@@ -83,19 +86,7 @@ usuarioSchema.post("save", function (err, doc, next) {
 // ingresado por el usuario es igual al almacenado en la BD (hash + salt)
 usuarioSchema.methods.comparePassword = function (candidatePassword) {
   const user = this;
-
-  return new Promise((resolve, reject) => {
-    // Comparar el password candidato con el password almacenado
-    bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
-      // Promesa incumplida
-      if (err) return reject(err);
-
-      // Promesa cumplida
-      if (!isMatch) return reject(err);
-
-      resolve(true);
-    });
-  }).catch(console.log("Error al momento de comparar los passwords"));
+  return bcrypt.compareSync(candidatePassword, user.password);
 };
 
 module.exports = mongoose.model("Usuarios", usuarioSchema);

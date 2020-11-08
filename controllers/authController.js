@@ -16,12 +16,17 @@ exports.autenticarUsuario = passport.authenticate("local", {
 
 // Cerrar la sesión del usuario
 exports.cerrarSesion = (req, res, next) => {
+  const messages = [];
+
   // Cierra la sesión
   req.logout();
 
-  req.flash("success", [
-    "Has cerrado correctamente tu sesión. ¡Vuelve pronto!",
-  ]);
+  messages.push({
+    message: "Has cerrado correctamente tu sesión. ¡Vuelve pronto!",
+    alertType: "success",
+  });
+
+  req.flash("messages", messages);
 
   return res.redirect("/iniciar-sesion");
 };

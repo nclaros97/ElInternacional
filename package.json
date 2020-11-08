@@ -26,20 +26,22 @@
   },
   "homepage": "https://github.com/nclaros97/ElInternacional#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "express-handlebars": "^5.2.0",
-    "mongoose": "^5.10.10",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
     "express-validator": "^6.6.1",
+    "mongoose": "^5.10.8",
+    "nodemailer": "^6.4.14",
+    "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "nodemailer": "^6.4.14",
-    "nodemailer-express-handlebars": "^4.0.0"
+    "shortid": "^2.2.16",
+    "slug": "^4.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

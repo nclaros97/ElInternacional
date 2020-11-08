@@ -59,7 +59,12 @@ exports.crearCuenta = async (req, res, next) => {
 
       res.redirect("/iniciar-sesion");
     } catch (error) {
-      console.log(error);
+      messages.push({
+        message: error,
+        alertType: "danger",
+      });
+      req.flash("messages", messages);
+      res.redirect("/crear-cuenta");
     }
   }
 };
@@ -73,6 +78,5 @@ exports.formularioIniciarSesion = (req, res, next) => {
     signButtonValue: "/crear-cuenta",
     signButtonText: "Regístrate",
     year,
-    messages: req.flash(),
   });
 };

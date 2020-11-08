@@ -10,8 +10,10 @@ mongoose.connect(process.env.DATABASE, {
 
 // Iniciar la conexión al servidor cloud mongo
 mongoose.connection.on("error", error => {
-  console.log(error);
+  console.log("Error al conectar: "+ error);
 });
 
 // Importar los modelos requeridos
 require("../models/Usuario");
+require("../models/Cliente");
+require("../models/Restaurantes");
