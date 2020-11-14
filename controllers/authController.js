@@ -8,7 +8,7 @@ const { send } = require("process");
 
 // Se encarga de autenticar el usuario y de redireccionarlo
 exports.autenticarUsuario = passport.authenticate("local", {
-  successRedirect: "/administrar",
+  successRedirect: "/",
   failureRedirect: "/iniciar-sesion",
   failureFlash: true,
   badRequestMessage: ["Debes ingresar tus credenciales"],
@@ -28,7 +28,7 @@ exports.cerrarSesion = (req, res, next) => {
 
   req.flash("messages", messages);
 
-  return res.redirect("/iniciar-sesion");
+  return res.redirect("/home");
 };
 
 // Mostrar el formulario de restablecer la contraseña

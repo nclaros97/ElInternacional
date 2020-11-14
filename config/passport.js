@@ -15,7 +15,6 @@ passport.use(
     async (req, email, password, done) => {
       // Verificar si el usuario existe en la BD
       const usuario = await Usuario.findOne({ email });
-      console.log(usuario);
       // Si el usuario no existe
       if (!usuario) {
         return done(
@@ -32,8 +31,6 @@ passport.use(
 
       // Si el usuario existe, verificar si la contraseña es correcta
       const verificarPassword = await usuario.comparePassword(password);
-
-      console.log(verificarPassword);
 
       // Si la contraseña es incorrecta
       if (!verificarPassword) {

@@ -3,6 +3,8 @@ const express = require("express");
 const usuarioController = require("../controllers/usuarioController");
 const authController = require("../controllers/authController");
 const { check } = require("express-validator");
+const { json } = require("express");
+const passport = require("passport");
 
 // Configura y mantiene todos los endpoints en el servidor
 const router = express.Router();
@@ -10,14 +12,36 @@ const router = express.Router();
 module.exports = () => {
 // Rutas disponibles
 router.get("/", (req, res, next) => {
-  res.render("home", {
+  console.log("Usuario: "+req.user);
+  if(req.user != undefined){
+    if(req.user.roles.includes('cliente')){
+      res.redirect("/home");
+    }
+  }else{
+    res.render("home", {
+      title: "El Internacional",
+      layout: "landingpage",
+      login:false
+    });
+  }
+  
+});
+
+router.get("/home", (req,res,next)=>{
+  console.log("Usuario Home: "+req.user);
+  let login = false;
+  if(req.user != undefined){login=true}
+  res.render("cliente/home", {
     title: "El Internacional",
-    layout: "landingpage"
+    layout: "frontend",
+    login
   });
 });
 
 // Rutas para usuario
 router.get("/crear-cuenta", usuarioController.formularioCrearCuenta);
+
+router.get("/cerrar-sesion",authController.cerrarSesion)
 
 router.post(
   "/crear-cuenta",
@@ -36,6 +60,8 @@ router.post(
   ],
   usuarioController.crearCuenta
 );
+
+
 
 router.get("/iniciar-sesion", usuarioController.formularioIniciarSesion);
 

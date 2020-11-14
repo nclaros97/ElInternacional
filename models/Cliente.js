@@ -3,11 +3,19 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const carritoShemaShema = new mongoose.Schema({
-    userId: mongoose.Types.ObjectId,
-    itemId: mongoose.Types.ObjectId,
-    cantidad: Number,
-    fechaIngreso: Date,
-    lastUpdate: Date,
+    userId: { 
+        type: mongoose.Schema.ObjectId,
+        ref: "Usuario",
+        required: true,},
+    detalleCarrito:[{
+        itemId: { 
+            type: mongoose.Schema.ObjectId,
+            ref: "Item",
+            required: true,},
+        cantidad: Number,
+        fechaIngreso: Date,
+        lastUpdate: Date,
+    }]
 });
 
 module.exports = mongoose.model("Clientes", carritoShemaShema);

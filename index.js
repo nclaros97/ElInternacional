@@ -44,7 +44,7 @@ app.use(
   })
   
 );
-
+//app.use(express.json());
 // Habilitar passport y la estrategia local
 app.use(passport.initialize());
 app.use(passport.session());

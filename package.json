@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nclaros97/ElInternacional.git"
+    "url": ""
   },
   "keywords": [
     "node",
@@ -22,9 +22,9 @@
   "author": "Equipo5",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nclaros97/ElInternacional/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/nclaros97/ElInternacional#readme",
+  "homepage": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
