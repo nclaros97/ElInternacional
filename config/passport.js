@@ -16,6 +16,7 @@ passport.use(
       // Verificar si el usuario existe en la BD
       const usuario = await Usuario.findOne({ email });
       // Si el usuario no existe
+      console.log(usuario);
       if (!usuario) {
         return done(
           null,
@@ -25,7 +26,7 @@ passport.use(
               message: "¡El correo electrónico no se encuentra registrado!",
               alertType: "danger",
             },
-          ])
+          ]),
         );
       }
 

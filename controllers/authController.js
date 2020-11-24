@@ -9,7 +9,7 @@ const { send } = require("process");
 // Se encarga de autenticar el usuario y de redireccionarlo
 exports.autenticarUsuario = passport.authenticate("local", {
   successRedirect: "/",
-  failureRedirect: "/iniciar-sesion",
+  failureRedirect: "/",
   failureFlash: true,
   badRequestMessage: ["Debes ingresar tus credenciales"],
 });

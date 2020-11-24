@@ -31,6 +31,25 @@ app.set("view engine", "hbs");
 // Definir ruta para archivos estáticos.
 app.use(express.static(path.join(__dirname, "public")));
 
+var hbs = exphbs.create({});
+
+hbs.handlebars.registerHelper("ifCond", function(valor,parametro,options) {
+
+    if(valor == parametro){
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
+
+hbs.handlebars.registerHelper("EachRol", function(valor,parametro,options) {
+
+  if(valor.includes(parametro)){
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+
 // Crear la sesión de usuario y la cookie encargada de almacenarla
 app.use(cookieParser());
 
@@ -44,7 +63,7 @@ app.use(
   })
   
 );
-//app.use(express.json());
+
 // Habilitar passport y la estrategia local
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +76,7 @@ app.use((req, res, next) => {
   res.locals.messages = req.flash();
   next();
 });
-
+app.use(express.json());
 // Habilitar body-parser para obtener el cuerpo de la petición
 app.use(bodyParser.urlencoded({ extended: true }));
 

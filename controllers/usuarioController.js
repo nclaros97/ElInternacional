@@ -2,20 +2,9 @@
 const mongoose = require("mongoose");
 const Usuario = mongoose.model("Usuarios");
 const { validationResult } = require("express-validator");
+const { reset } = require("nodemon");
 
 const year = new Date().getFullYear();
-
-// Cargar el formulario de la creación de una cuenta de usuario
-exports.formularioCrearCuenta = (req, res, next) => {
-  res.render("autenticacion/registrarse", {
-    layout: "auth",
-    title: "Crear Cuenta",
-    typePage: "register-page",
-    signButtonValue: "/iniciar-sesion",
-    signButtonText: "Iniciar sesión",
-    year,
-  });
-};
 
 // Procesar el formulario de creación de cuenta
 exports.crearCuenta = async (req, res, next) => {
@@ -23,7 +12,7 @@ exports.crearCuenta = async (req, res, next) => {
   const errores = validationResult(req);
   const messages = [];
   // Obtener las variables desde el cuerpo de la petición
-  const { nombre, email, password } = req.body;
+  const { nombre, email, password, tipo } = req.body;
 
   // Si hay errores
   if (!errores.isEmpty()) {
@@ -37,7 +26,7 @@ exports.crearCuenta = async (req, res, next) => {
     // Agregar los errores a nuestro mensajes flash
     req.flash("messages", messages);
 
-    res.redirect("/crear-cuenta");
+    res.redirect("/");
   } else {
     // Intentar almacenar los datos del usuario
     try {
@@ -48,7 +37,7 @@ exports.crearCuenta = async (req, res, next) => {
         email,
         password,
         nombre,
-        roles:['cliente']
+        roles:[tipo]
       });
 
       // Mostrar un mensaje
@@ -58,26 +47,14 @@ exports.crearCuenta = async (req, res, next) => {
       });
       req.flash("messages", messages);
 
-      res.redirect("/iniciar-sesion");
+      res.redirect("/");
     } catch (error) {
       messages.push({
         message: error,
         alertType: "danger",
       });
       req.flash("messages", messages);
-      res.redirect("/crear-cuenta");
+      res.redirect("/");
     }
   }
-};
-
-// Cargar el formulario de inicio de sesión
-exports.formularioIniciarSesion = (req, res, next) => {
-  res.render("autenticacion/iniciarSesion", {
-    layout: "auth",
-    title: "Login",
-    typePage: "login-page",
-    signButtonValue: "/crear-cuenta",
-    signButtonText: "Regístrate",
-    year,
-  });
 };

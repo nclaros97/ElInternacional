@@ -12,9 +12,15 @@ const router = express.Router();
 module.exports = () => {
 // Rutas disponibles
 router.get("/", (req, res, next) => {
-  console.log("Usuario: "+req.user);
-  if(req.user != undefined){
+  console.log(req.isAuthenticated());
+  if(req.user != undefined || req.isAuthenticated()){
     if(req.user.roles.includes('cliente')){
+      res.redirect("/home");
+    }
+    if(req.user.roles.includes('restaurante')){
+      res.redirect("/home");
+    }
+    if(req.user.roles.includes('delivery')){
       res.redirect("/home");
     }
   }else{
@@ -28,18 +34,21 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/home", (req,res,next)=>{
-  console.log("Usuario Home: "+req.user);
+  let tipo = "";
+  if(req.user != null){
+    tipo = req.user.roles;
+  }
+  let pagActual = 'Inicio';
   let login = false;
   if(req.user != undefined){login=true}
   res.render("cliente/home", {
     title: "El Internacional",
     layout: "frontend",
-    login
+    login,
+    tipo,
+    pagActual
   });
 });
-
-// Rutas para usuario
-router.get("/crear-cuenta", usuarioController.formularioCrearCuenta);
 
 router.get("/cerrar-sesion",authController.cerrarSesion)
 
@@ -60,10 +69,6 @@ router.post(
   ],
   usuarioController.crearCuenta
 );
-
-
-
-router.get("/iniciar-sesion", usuarioController.formularioIniciarSesion);
 
 router.post("/iniciar-sesion", authController.autenticarUsuario);
 

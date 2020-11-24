@@ -56,6 +56,31 @@ header,
     height: 650px;
   }
 }
+
+.display-1{
+  font-size: 5rem!important ;
+}
+@media (max-width: 650px){
+  .display-1{
+    font-size: 3rem!important;
+  }
+}
+
+@media (max-width: 280px){
+  .display-1{
+    font-size: 2.5rem!important;
+  }
+}
+
+@media (max-width: 1167px){
+  .wow{
+    background-color: #ffffffeb;
+    border-radius: 30px;
+    box-shadow: 18px 18px 20px #D1D9E6, -18px -18px 20px #FFFFFF;
+  }
+}
+
+
 @media (min-width: 800px) and (max-width: 850px) {
           .navbar:not(.top-nav-collapse) {
               background: #1C2331!important;
@@ -66,6 +91,7 @@ header,
   background-image: url('/img/svg/landing.svg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: right;
 }
 
 .logo{

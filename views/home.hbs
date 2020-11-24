@@ -12,7 +12,7 @@
 
           <!--Grid column-->
           <div class="col-md-6 mb-4 black-text text-center text-md-left">
-
+            {{> showMessages messages}}
             <h1 class="display-1 font-weight-bold">El Internacional</h1>
 
             <hr class="hr-light">
@@ -21,7 +21,7 @@
               <strong>Comida deliciosa para todos los estados de ánimo</strong>
             </p>
 
-            <a href="/crear-cuenta" class="btn btn-indigo btn-lg">Registrarse
+            <a href="" class="btn btn-indigo btn-lg" data-toggle="modal" data-target="#modalRegisterClienteForm">Registrarse
               <i class="fa fa-plus-circle" aria-hidden="true"></i>
             </a>
 
@@ -50,10 +50,54 @@
   <main>
     <div class="container">
 
+            <!--Section: Main info-->
+      <section class="mt-5 wow fadeIn">
+
+        <!--Grid row-->
+        <div class="row">
+
+          <!--Grid column-->
+          <div class="col-md-6 mb-4">
+
+            <img src="/img/mdb-main.jpg" class="img-fluid z-depth-1-half" alt="">
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-md-6 mb-4">
+
+            <!-- Main heading -->
+            <h3 class="h3 mb-3">Registrate con nosotros</h3>
+            <p>Un lugar creado para que puedas comprar y vender tus platillos favoritos
+            <p>Conocenos.</p>
+            <!-- Main heading -->
+
+            <hr>
+
+            <p>
+              <strong>100+</strong> Restaurantes,
+              <strong>1000+</strong> Usuarios activos
+            </p>
+
+            <!-- CTA -->
+            <a href="" class="btn btn-indigo btn-md" data-toggle="modal" data-target="#modalRegisterRestauranteForm">Registra tu restaurante 
+              <i class="fas fa-plus-circle ml-1"></i>
+            </a>
+            <a href="" class="btn btn-indigo btn-md" data-toggle="modal" data-target="#modalRegisterDeliveryForm">Registrate como Delivey 
+              <i class="fas fa-plus-circle ml-1"></i>
+            </a>
+          </div>
+          <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+      </section>
+      <!--Section: Main info-->
+
       <!--Section: Not enough-->
       <section>
-
-        <h2 class="my-5 h3 text-center">Registrate con nosotros</h2>
 
         <!--First row-->
         <div class="row features-small mb-5 mt-3 wow fadeIn">
@@ -242,3 +286,133 @@
     </div>
   </main>
   <!--Main layout-->
+  
+  {{> modalLogin  }}
+
+  {{!-- MODAL REGISTRAR CLIENTE --}}
+  <div class="modal fade" id="modalRegisterClienteForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">
+            Registro
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="/crear-cuenta">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <i class="fas fa-user prefix grey-text"></i>
+            <input type="text" id="orangeForm-name" name="nombre" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-name">Nombre completo</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fas fa-envelope prefix grey-text"></i>
+            <input type="email" id="orangeForm-email" name="email" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-email">Correo electrónico</label>
+          </div>
+
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <input type="password" id="orangeForm-pass" class="form-control validate" name="password" required>
+            <label data-error="wrong" data-success="right" for="orangeForm-pass">Contraseña</label>
+          </div>
+          <input type="text" id="orangeForm-tipo-cliente" class="form-control validate" name="tipo" value="cliente" hidden>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Registrar</button>
+        </div>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+  {{!-- FIN MODAL REGISTRAR CLIENTE --}}
+
+    {{!-- MODAL REGISTRAR RESTAURANTE --}}
+  <div class="modal fade" id="modalRegisterRestauranteForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">
+            Registrate y Crea Tus Restaurantes
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="/crear-cuenta">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <i class="fas fa-user prefix grey-text"></i>
+            <input type="text" id="orangeForm-name-restaurante" name="nombre" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-name">Nombre completo</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fas fa-envelope prefix grey-text"></i>
+            <input type="email" id="orangeForm-email-restaurante" name="email" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-email">Correo electrónico</label>
+          </div>
+
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <input type="password" id="orangeForm-pass-restaurante" class="form-control validate" name="password" required>
+            <label data-error="wrong" data-success="right" for="orangeForm-pass">Contraseña</label>
+          </div>
+          <input type="text" id="orangeForm-tipo-restaurante" class="form-control validate" name="tipo" value="restaurante" hidden>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Registrar</button>
+        </div>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+  {{!-- FIN MODAL REGISTRAR RESTAURANTE --}}
+
+    {{!-- MODAL REGISTRAR DELIVERY --}}
+  <div class="modal fade" id="modalRegisterDeliveryForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">
+            Registrate Como Repartidor
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" action="/crear-cuenta">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-5">
+            <i class="fas fa-user prefix grey-text"></i>
+            <input type="text" id="orangeForm-name-delivery" name="nombre" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-name">Nombre completo</label>
+          </div>
+          <div class="md-form mb-5">
+            <i class="fas fa-envelope prefix grey-text"></i>
+            <input type="email" id="orangeForm-email-delivery" name="email" required class="form-control validate">
+            <label data-error="wrong" data-success="right" for="orangeForm-email">Correo electrónico</label>
+          </div>
+
+          <div class="md-form mb-4">
+            <i class="fas fa-lock prefix grey-text"></i>
+            <input type="password" id="orangeForm-pass-delivery" class="form-control validate" name="password" required>
+            <label data-error="wrong" data-success="right" for="orangeForm-pass">Contraseña</label>
+          </div>
+          <input type="text" id="orangeForm-tipo-delivery" class="form-control validate" name="tipo" value="delivery" hidden>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-deep-orange">Registrar</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {{!-- FIN MODAL REGISTRAR DELIVERY --}}
