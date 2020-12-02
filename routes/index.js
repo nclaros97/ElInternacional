@@ -18,10 +18,10 @@ router.get("/", (req, res, next) => {
       res.redirect("/home");
     }
     if(req.user.roles.includes('restaurante')){
-      res.redirect("/home");
+      res.redirect("/administracion/restaurantes/home");
     }
     if(req.user.roles.includes('delivery')){
-      res.redirect("/home");
+      res.redirect("/administracion/delivery/home");
     }
   }else{
     res.render("home", {
@@ -44,6 +44,42 @@ router.get("/home", (req,res,next)=>{
   res.render("cliente/home", {
     title: "El Internacional",
     layout: "frontend",
+    login,
+    tipo,
+    pagActual,
+    year: new Date().getFullYear(),
+  });
+});
+
+router.get("/administracion/restaurantes/home", (req,res,next)=>{
+  let tipo = "";
+  if(req.user != null){
+    tipo = req.user.roles;
+  }
+  let pagActual = 'Inicio';
+  let login = false;
+  if(req.user != undefined){login=true}
+  res.render("administracion/restaurantes/home", {
+    title: "El Internacional - Administracion Restaurantes",
+    layout: "admin",
+    login,
+    tipo,
+    pagActual,
+    year: new Date().getFullYear(),
+  });
+});
+
+router.get("/administracion/delivery/home", (req,res,next)=>{
+  let tipo = "";
+  if(req.user != null){
+    tipo = req.user.roles;
+  }
+  let pagActual = 'Inicio';
+  let login = false;
+  if(req.user != undefined){login=true}
+  res.render("administracion/delivery/home", {
+    title: "El Internacional - Administracion DElivery",
+    layout: "admin",
     login,
     tipo,
     pagActual
