@@ -28,7 +28,7 @@ exports.cerrarSesion = (req, res, next) => {
 
   req.flash("messages", messages);
 
-  return res.redirect("/home");
+  return res.redirect("/inicio");
 };
 
 // Mostrar el formulario de restablecer la contraseña

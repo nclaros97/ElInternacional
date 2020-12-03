@@ -35,6 +35,7 @@ const restauranteSchema = new mongoose.Schema({
             ref: "Restaurante",
             required: true,
          },
+        estado: String,
         imgurl: String,
     }],
     ordenes: [{
