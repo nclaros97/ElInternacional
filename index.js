@@ -24,7 +24,7 @@ require("dotenv").config({ path: ".env" });
 const app = express();
 
 // Habilitar Handlebars como nuestro template engine
-app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.engine("hbs", exphbs({ defaultLayout: "frontend", extname: ".hbs" }));
 
 app.set("view engine", "hbs");
 

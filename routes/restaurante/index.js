@@ -1,14 +1,19 @@
 // Importar los módulos requeridos
 const express = require("express");
-const { check } = require("express-validator");
 const restauranteController = require("../../controllers/RestauranteController");
+const mongoose = require("mongoose");
+const Restaurante = mongoose.model("Restaurantes");
+
+const { json } = require("express");
+const passport = require("passport");
 // Configura y mantiene todos los endpoints en el servidor
 const router = express.Router();
+const authController = require("../../controllers/authController");
 
 module.exports = () => {
 
   router.use(async function (req, res, next) {
-
+    const { check } = require("express-validator");
     if (req.user != null) {
       if (req.user.roles.includes("restaurante") && true) {
 
@@ -128,7 +133,7 @@ module.exports = () => {
         });
 
         // Rutas disponibles
-        router.get("/lista-restaurantes", (req, res, next) => {
+        router.get("/lista-restaurantes", async (req, res, next) => {
           let tipo = "";
           if (req.user != null) {
             tipo = req.user.roles;
@@ -136,12 +141,18 @@ module.exports = () => {
           let pagActual = 'Inicio';
           let login = false;
           if (req.user != undefined) { login = true }
+
+          // Obtener todos los restaurantes disponibles
+          const restaurantes = await Restaurante.find().lean();
+          let rutaImg = `/public/uploads/items`;
           res.render("administracion/restaurantes/adminRestaurantes/restaurantes", {
             title: "El Internacional - Administracion Items",
             layout: "admin",
             login,
             tipo,
             pagActual,
+            restaurantes,
+            rutaImg,
             rutaBase: "restaurantes/",
             year: new Date().getFullYear(),
           });
@@ -167,17 +178,20 @@ module.exports = () => {
           });
         });
         // Rutas disponibles
-        router.post("/nuevo", [
-          check("nombre", "Debes ingresar el nombre del producto")
+        router.post("/nuevo",
+        restauranteController.subirImagen,
+        [
+          check("nombre", "Debes ingresar el nombre del restaurante")
             .not()
             .isEmpty()
             .escape(),
-          check("descripcion", "Debes ingresar la descripción del producto")
+          check("descripcion", "Debes ingresar la descripción del restaurante")
             .not()
             .isEmpty()
             .escape()
         ],
-          restauranteController.crearRestaurante);
+        restauranteController.crearRestaurante
+          );
 
       } else {
         res.redirect("/");

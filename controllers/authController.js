@@ -3,7 +3,7 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const Usuario = mongoose.model("Usuarios");
-const enviarCorreo = require("../handlers/email");
+const enviarCorreo = require("../handlebars/email");
 const { send } = require("process");
 
 // Se encarga de autenticar el usuario y de redireccionarlo
@@ -209,4 +209,13 @@ exports.almacenarNuevaPassword = async (req, res, next) => {
 
     res.redirect("/olvide-password");
   }
+};
+
+// Verifica que el usuario se encuentre autenticado
+exports.verificarInicioSesion = (req, res, next) => {
+  // Si el usuario se encuentra autenticado que siga con el siguiente middleware
+  if (req.isAuthenticated()) return next();
+
+  // Si no se auntenticó, redireccionar al inicio de sesión
+  res.redirect("/");
 };

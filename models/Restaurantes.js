@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const shortid = require("shortid");
+const slug = require("slug");
 
 const restauranteSchema = new mongoose.Schema({
     nombre: String,

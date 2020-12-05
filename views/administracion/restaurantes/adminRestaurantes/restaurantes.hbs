@@ -1,2 +1,30 @@
+
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#centralModalNuevo">Nuevo
+</button>
 <h1>Lista restaurantes no implementado</h1>
-<a href="/{{rutaBase}}nuevo">Nuevo</a>
+{{> showMessages messages}}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Url</th>
+      <th scope="col">Imagen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each restaurantes as |restaurante|}}
+    <tr>
+      <td>{{restaurante._id}}</td>
+      <td>{{ restaurante.nombre }}</td>
+      <td>{{ restaurante.url }}</td>
+      <td><img src="/uploads/items/{{restaurante.imagen_url}}" alt="imagen del restaurante" width="200"></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+{{> modalRestaurantes }}
+
