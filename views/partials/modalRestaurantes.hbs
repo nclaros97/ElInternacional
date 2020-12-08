@@ -1,4 +1,5 @@
-<!-- Central Modal Large Info-->
+
+  <!-- Central Modal Large Info-->
 <div class="modal fade" id="centralModalNuevo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
@@ -6,7 +7,7 @@
     <div class="modal-content">
       <!--Header-->
       <div class="modal-header">
-        <p class="heading lead">{{ accion }} Restaurante {{#if editar}} {{ nombre }} {{/if}}</p>
+        <p class="heading lead">Nuevo Restaurante {{ valor }}</p>
 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" class="white-text">&times;</span>
@@ -23,7 +24,7 @@
           <div class="card-body px-lg-5 pt-0">
 
             <!-- Form -->
-            <form action="http://localhost:5600/restaurantes/nuevo" method="POST" class="text-center"
+            <form action="/restaurantes/nuevo" method="POST" class="text-center"
               style="color: #757575;" enctype="multipart/form-data">
 
               <div class="form-row mb-4">
@@ -49,7 +50,7 @@
                   <!-- Nombre -->
                   <div class="md-form mt-3">
                     <input type="text" id="materialContactFormRating" name="rating" class="form-control">
-                    <label for="materialContactFormName">Rating</label>
+                    <label for="materialContactFormName">Valoración</label>
                   </div>
                 </div>
                 <div class="col">

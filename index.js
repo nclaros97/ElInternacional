@@ -78,6 +78,7 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 // Habilitar body-parser para obtener el cuerpo de la petición
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Implementar las rutas a utilizar

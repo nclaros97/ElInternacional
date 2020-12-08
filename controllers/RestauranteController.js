@@ -16,7 +16,8 @@ exports.formularioCrearItem = (req, res, next) => {
     });
   };
 
-exports.vistaItems = (req, res, next) =>{
+exports.vistaItems = async (req, res, next) =>{
+  console.log(req.params);
     let tipo = "";
     if(req.user != null){
       tipo = req.user.roles;
@@ -24,11 +25,13 @@ exports.vistaItems = (req, res, next) =>{
     let pagActual = 'Inicio';
     let login = false;
     if(req.user != undefined){login=true}
+    const restaurante = await Restaurante.findOne({url: req.params.id}).lean();
     res.render("administracion/restaurantes/items/items", {
         title: "El Internacional - Administracion Items",
         layout: "admin",
         login,
         tipo,
+        restaurante,
         pagActual,
         rutaBase:"restaurantes/",
         year: new Date().getFullYear(),
@@ -117,7 +120,7 @@ exports.crearRestaurante = async (req, res, next) => {
     // Enviar los errores a través de flash messages
     req.flash("messages", messages);
 
-    res.redirect("escritorio");
+    res.redirect("lista-restaurantes");
   } else {
     // Almacenar los valores del restaurante
     try {
@@ -172,22 +175,80 @@ exports.crearRestaurante = async (req, res, next) => {
   }
 };
 
+// Crear un restaurante
+exports.editarRestaurante = async (req, res, next) => {
+  console.log(req.body);
+  // Verificar que no existen errores de validación
+  const errores = validationResult(req);
+  const messages = [];
+  console.log(errores);
+  // Si hay errores
+  if (!errores.isEmpty()) {
+    errores.array().map((error) => {
+      messages.push({ message: error.msg, alertType: "danger" });
+    });
+
+    // Enviar los errores a través de flash messages
+    req.flash("messages", messages);
+
+    res.redirect("lista-restaurantes");
+  } else {
+    // Almacenar los valores del restaurante
+    try {
+      const { 
+        nombre,
+        descripcion,
+        rating,
+        aprox_delivery_time, 
+        direccion,
+        latitud,
+        longitud,
+        cargo_empaque,
+        delivery_type,
+        delivery_radio,
+        costo_repartir,
+        precio_minimo_orden,
+         } = req.body;
+
+         
+        let filter = { _id: req.body._id };
+      await Restaurante.updateOne(filter,{nombre,
+        descripcion,
+        rating,
+        aprox_delivery_time, 
+        direccion,
+        latitud,
+        longitud,
+        cargo_empaque,
+        delivery_type,
+        delivery_radio,
+        costo_repartir,
+        precio_minimo_orden,
+        imagen_url: req.file.filename,
+        userId: req.user._id,});
+
+      messages.push({
+        message: "Restaurante agregado correctamente!",
+        alertType: "success",
+      });
+      req.flash("messages", messages);
+
+      res.redirect("lista-restaurantes");
+    } catch (error) {
+      console.log(error);
+      messages.push({
+        message: error,
+        alertType: "danger",
+      });
+      req.flash("messages", messages);
+      res.redirect("lista-restaurantes");
+    }
+  }
+  
+};
+
   // Permite subir un archivo (imagen) al servidor
 exports.subirImagen = (req, res, next) => {
-  // Verificar que no existen errores de validación
-  // const errores = validationResult(req);
-  // const errores = [];
-  // const messages = [];
-
-  // if (!errores.isEmpty) {
-  //   errores.array().map((error) => {
-  //     messages.push({ message: error.msg, alertType: "danger" });
-  //   });
-
-  //   req.flash("messages", messages);
-  //   res.redirect("/crear-producto");
-  // } else {
-  // Subir el archivo mediante Multer
   upload(req, res, function (error) {
     if (error) {
       // Errores de Multer

@@ -55,3 +55,15 @@
   .caja{
     min-height: calc(100vh - 100px);
   }
+
+  .btn-Eliminar{
+    display: inline;
+  }
+
+  .imagen-restaurante{
+    
+    float: left;
+    width: 50%;
+    margin-bottom: 1rem;
+
+  }

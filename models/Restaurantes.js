@@ -37,6 +37,10 @@ const restauranteSchema = new mongoose.Schema({
             required: true,
          },
         estado: String,
+        url: {
+            type: String,
+            lowercase: true,
+          }, 
         imgurl: String,
     }],
     ordenes: [{
@@ -76,6 +80,17 @@ restauranteSchema.pre("save", function (next) {
     next();
   });
   
+  // Hooks para generar la URL del restaurante
+restauranteSchema.pre("updateOne", function (next) {
+    // Crear la URL
+    console.log("AJA");
+    console.log(this._update);
+    const url = slug(this._update.nombre);
+    this._update.url = `${url}-${shortid.generate()}`;
+    
+    next();
+  });
+
   // Generar un índice para mejorar la búsqueda por el nombre del producto
   restauranteSchema.index({ nombre: "text" });
 

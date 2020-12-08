@@ -1,2 +1,33 @@
-<h1>Items no implementado</h1>
-<a href="/{{rutaBase}}items/nuevo">Nuevo</a>
+<h1>Restaurante: {{restaurante.nombre}}</h1>
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#centralModalNuevo">Nuevo Item
+</button>
+{{> showMessages messages}}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Url</th>
+      <th scope="col">Imagen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each restaurante.items as |item|}}
+    <tr>
+      <td>{{ item.nombre }}</td>
+      <td><a href=""></a></td>
+      <td><img src="/uploads/items/{{item.imgurl}}" alt="imagen del item" width="200"></td>
+      <td>
+        <a  href="{{item._id}}" class="btn btn-info">Editar</a>
+        <a  href="items/{{item.url}}" class="btn btn-secondary">Items</a>
+        <form action="{{ item._id }}/eliminar" method="post" class="btn-Eliminar">
+        <button type="submit" class="btn btn-danger" >Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+{{> modalItems }}
+
