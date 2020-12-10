@@ -83,10 +83,21 @@ restauranteSchema.pre("save", function (next) {
   // Hooks para generar la URL del restaurante
 restauranteSchema.pre("updateOne", function (next) {
     // Crear la URL
-    console.log("AJA");
-    console.log(this._update);
-    const url = slug(this._update.nombre);
-    this._update.url = `${url}-${shortid.generate()}`;
+    console.log(this._update.$push);
+    if(this._update.nombre != undefined){
+      console.log("AJA");
+      console.log(this._update);
+      const url = slug(this._update.nombre);
+      this._update.url = `${url}-${shortid.generate()}`;
+    }
+    if(this._update.$push != undefined){
+      console.log("AJA Item");
+      console.log(this._update.$push.items.nombre);
+      const url = slug(this._update.$push.items.nombre);
+      this._update.$push.items.url = `${url}-${shortid.generate()}`;
+      this._update.$push.items.estado = 1;
+    }
+    
     
     next();
   });

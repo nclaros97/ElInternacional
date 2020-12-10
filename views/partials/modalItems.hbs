@@ -22,11 +22,11 @@
 
           <!--Card content-->
           <div class="card-body px-lg-5 pt-0">
-
+            <h1>Restaurante: {{restaurante.nombre}}</h1>
             <!-- Form -->
-            <form action="/restaurantes/items/nuevo" method="POST" class="text-center"
+            <form action="/restaurantes/{{restaurante._id}}/items/nuevo" method="POST" class="text-center"
               style="color: #757575;" enctype="multipart/form-data">
-
+              <input type="hidden" name="restaurante_id" value="{{restaurante._id}}">
               <div class="form-row mb-4">
 
                 <div class="col">
@@ -49,7 +49,7 @@
                 <div class="col">
                   <!-- Nombre -->
                   <div class="md-form mt-3">
-                    <input type="text" id="materialContactFormRating" name="rating" class="form-control">
+                    <input type="text" id="materialContactFormRating" name="precio" class="form-control">
                     <label for="materialContactFormName">Precio</label>
                   </div>
                 </div>
@@ -61,12 +61,12 @@
               
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                  <span class="input-group-text" id="inputGroupFileAddon01">Subir</span>
                 </div>
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" id="inputGroupFile01" name="imagen_url"
                     aria-describedby="inputGroupFileAddon01">
-                  <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                  <label class="custom-file-label" for="inputGroupFile01">Buscar archivo</label>
                 </div>
               </div>
 

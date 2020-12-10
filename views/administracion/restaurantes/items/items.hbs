@@ -18,9 +18,9 @@
       <td><a href=""></a></td>
       <td><img src="/uploads/items/{{item.imgurl}}" alt="imagen del item" width="200"></td>
       <td>
-        <a  href="{{item._id}}" class="btn btn-info">Editar</a>
-        <a  href="items/{{item.url}}" class="btn btn-secondary">Items</a>
-        <form action="{{ item._id }}/eliminar" method="post" class="btn-Eliminar">
+        <a  href="/restaurantes/1/item/{{item.url}}" class="btn btn-info">Editar</a>
+        <form action="items/{{ item._id }}/eliminar/" method="post" class="btn-Eliminar">
+
         <button type="submit" class="btn btn-danger" >Eliminar</button>
         </form>
       </td>

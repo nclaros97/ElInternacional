@@ -79,13 +79,35 @@ module.exports = () => {
         });
 
         // Rutas disponibles
-        router.get("/items/:id", restauranteController.vistaItems);
+        router.get("/:id/items", restauranteController.vistaItems);
 
         // Rutas disponibles
-        router.get("/items/nuevo", restauranteController.vistaCrearItems);
+        router.post("/:restaurante/items/nuevo", restauranteController.subirImagen, 
+        [
+          check("nombre", "Debes ingresar el nombre del producto")
+            .not()
+            .isEmpty()
+            .escape(),
+          check("descripcion", "Debes ingresar la descripción del producto")
+            .not()
+            .isEmpty()
+            .escape(),
+          check("precio", "Debes ingresar el precio del producto")
+            .not()
+            .isEmpty()
+            .escape(),
+          check("precio", "Valor incorrecto en el precio del producto").isNumeric(),
+        ],
+          restauranteController.crearItem);
+        
+        router.get("/:restaurante/item/:url", async (req,res,next) =>{
+            //obtener restaurante por url
+            res.send("hola");
+          });
 
         // Rutas disponibles
-        router.post("/items/nuevo", [
+        router.post("/:id/items/:url", restauranteController.subirImagen, 
+        [
           check("nombre", "Debes ingresar el nombre del producto")
             .not()
             .isEmpty()
@@ -103,14 +125,11 @@ module.exports = () => {
           restauranteController.crearItem);
 
         // Rutas disponibles
-        router.put("/:idRes/items/editar/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
+        router.post("/:id/items/:url/eliminar", async (req,res,next) =>{
+            await Restaurante.deleteOne({_id:req.params.id})
+            res.redirect("/restaurantes/lista-restaurantes");
         });
 
-        // Rutas disponibles
-        router.delete("/:idRes/items/eliminar/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
 
         // Rutas disponibles
         router.get("/escritorio", (req, res, next) => {
