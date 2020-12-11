@@ -17,7 +17,7 @@ exports.formularioCrearItem = (req, res, next) => {
   };
 
 exports.vistaItems = async (req, res, next) =>{
-  console.log(req.params);
+
     let tipo = "";
     if(req.user != null){
       tipo = req.user.roles;
@@ -49,18 +49,79 @@ exports.vistaEditarItems = async (req, res, next) =>{
   if(req.user != undefined){login=true}
 
 
-  let item = await Restaurante.findOne({url:req.params.id},).lean();
-
+  let item = await Restaurante.findOne({url:req.params.id},{items : {$elemMatch:{url:req.params.url}}},{url:req.params.url}).lean();
+  let itemObtenido;
+  if(item != undefined){
+   itemObtenido =item.items[0]
+  };
   res.render("administracion/restaurantes/items/editarItem", {
       title: "El Internacional - Editar Item",
       layout: "admin",
       login,
       tipo,
-      item,
+      itemObtenido,
       pagActual,
       rutaBase:"restaurantes/",
       year: new Date().getFullYear(),
     });
+};
+
+// Crear un item
+exports.EditarItems = async (req, res, next) => {
+  console.log(restaurante);
+  return;
+  let restaurante = await Restaurante.findOne({url:req.params.id}).lean();
+  
+  // Verificar que no existen errores de validación
+  const errores = validationResult(req);
+  const messages = [];
+
+  // Si hay errores
+  if (!errores.isEmpty()) {
+    errores.array().map((error) => {
+      messages.push({ message: error.msg, alertType: "danger" });
+    });
+
+    // Enviar los errores a través de flash messages
+    req.flash("messages", messages);
+    res.redirect("/restaurantes/"+restaurante.url+"/items");
+  } else {
+    // Almacenar los valores del item
+    try {
+      const { nombre, descripcion, precio, restaurante_id } = req.body;
+      let imgurl = "";
+      if(req.file != undefined){
+       imgurl = req.file.filename;
+      }
+
+      let item = await Restaurante.findOne();
+      if(item.imgurl){
+        imgurl = item.imgurl;
+      }else{
+        imgurl = "no-image-default.png";
+      }
+      const editar = {
+        $set: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
+      }
+      await Restaurante.updateOne({url:req.params.id,"items.url":req.params.url},editar);
+
+      messages.push({
+        message: "Item agregado correctamente!",
+        alertType: "success",
+      });
+      req.flash("messages", messages);
+
+      res.redirect("/restaurantes/"+restaurante.url+"/items");
+    } catch (error) {
+      console.log(error);
+      messages.push({
+        message: error,
+        alertType: "danger",
+      });
+      req.flash("messages", messages);
+      res.redirect("/restaurantes/"+restaurante.url+"/items");
+    }
+  }
 };
 
 // Crear un item

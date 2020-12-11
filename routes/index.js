@@ -2,6 +2,7 @@
 const express = require("express");
 const usuarioController = require("../controllers/usuarioController");
 const authController = require("../controllers/authController");
+const homeController = require("../controllers/HomeController");
 const { check } = require("express-validator");
 const { json } = require("express");
 const passport = require("passport");
@@ -46,6 +47,7 @@ router.get("/inicio", async (req,res,next)=>{
   let login = false;
   if(req.user != undefined){login=true}
   let restaurantes = await Restaurantes.find().lean();
+
   res.render("cliente/inicio", {
     title: "El Internacional",
     layout: "frontend",
@@ -126,10 +128,12 @@ router.get("/olvide-password/:token", authController.formularioNuevoPassword);
 
 router.post("/olvide-password/:token", authController.almacenarNuevaPassword);
 
-// Rutas de administración
-router.get("/administrar", (req, res, next) => {
-  res.send("Administración del sitio");
-});
+// items del restaurante
+router.get("/:restaurante",homeController.itemsRestaurante);
+
+
+
+
 return router;
 };
 
