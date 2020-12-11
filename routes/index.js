@@ -5,13 +5,16 @@ const authController = require("../controllers/authController");
 const { check } = require("express-validator");
 const { json } = require("express");
 const passport = require("passport");
-
+const restaurante = require("./restaurante");
+const Restaurantes = require("../models/Restaurantes");
+const mongoose = require("mongoose");
+const Restaurante = mongoose.model("Restaurantes");
 // Configura y mantiene todos los endpoints en el servidor
 const router = express.Router();
 
 module.exports = () => {
 // Rutas disponibles
-router.get("/", (req, res, next) => {
+router.get("/", async (req, res, next) =>  {
   if(req.user != undefined || req.isAuthenticated()){
     if(req.user.roles.includes('cliente')){
       res.redirect("/inicio");
@@ -23,16 +26,18 @@ router.get("/", (req, res, next) => {
       res.redirect("/delivery");
     }
   }else{
+    let restaurantes = await Restaurantes.find().lean();
     res.render("inicio", {
       title: "El Internacional",
       layout: "landingpage",
+      restaurantes,
       login:false
     });
   }
   
 });
 
-router.get("/inicio", (req,res,next)=>{
+router.get("/inicio", async (req,res,next)=>{
   let tipo = "";
   if(req.user != null){
     tipo = req.user.roles;
@@ -40,10 +45,12 @@ router.get("/inicio", (req,res,next)=>{
   let pagActual = 'Inicio';
   let login = false;
   if(req.user != undefined){login=true}
+  let restaurantes = await Restaurantes.find().lean();
   res.render("cliente/inicio", {
     title: "El Internacional",
     layout: "frontend",
     login,
+    restaurantes,
     tipo,
     pagActual,
     year: new Date().getFullYear(),

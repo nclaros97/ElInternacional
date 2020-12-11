@@ -1,1 +1,51 @@
 {{> modalLogin  }}
+
+    <div class="row principal">
+        <div class="col-lg-12 col-xs-12">
+                <!--Section: Content-->
+                <section class="dark-grey-text text-center">
+                    <!-- Grid row -->
+                    <div class="row">
+
+                       {{#each  restaurantes as |restaurante|}}
+                         <!-- Grid column -->
+                        <div class="col-lg-3 col-md-6 mb-4 d-flex align-items-stretch">
+                            <!-- Card -->
+                            <div class="card align-items-center">
+                                <!-- Card image -->
+                                <div class="view overlay">
+                                    <img src="/uploads/items/{{restaurante.imagen_url}}"
+                                        class="card-img-top" alt="">
+                                    <a>
+                                        <div class="mask rgba-white-slight"></div>
+                                    </a>
+                                </div>
+                                <!-- Card image -->
+                                <!-- Card content -->
+                                <div class="card-body text-center">
+                                    <!-- Category & Title -->
+                                    <a href="" class="grey-text">
+                                        <h6>{{ restaurante.nombre }}</h6>
+                                    </a>
+                                    <h5 class="mb-3">
+                                        <strong>
+                                            <a href="" class="dark-grey-text">{{ restaurante.descripcion }} <br>
+                                                <span class="badge badge-pill danger-color">NEW</span>
+                                            </a>
+                                        </strong>
+                                    </h5>
+                                </div>
+                                <!-- Card content -->
+                            </div>
+                            <!-- Card -->
+                        </div>
+                        <!-- Grid column -->
+                       {{/each  }}
+
+                    </div>
+                    <!-- Grid row -->
+
+                </section>
+                <!--Section: Content-->
+        </div>
+    </div>

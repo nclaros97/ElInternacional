@@ -39,7 +39,7 @@ exports.vistaItems = async (req, res, next) =>{
       });
 };
 
-exports.vistaCrearItems = (req, res, next) =>{
+exports.vistaEditarItems = async (req, res, next) =>{
   let tipo = "";
   if(req.user != null){
     tipo = req.user.roles;
@@ -47,11 +47,16 @@ exports.vistaCrearItems = (req, res, next) =>{
   let pagActual = 'Inicio';
   let login = false;
   if(req.user != undefined){login=true}
-  res.render("administracion/restaurantes/items/crear-items", {
-      title: "El Internacional - Crear Nuevo Item",
+
+
+  let item = await Restaurante.findOne({url:req.params.id},).lean();
+
+  res.render("administracion/restaurantes/items/editarItem", {
+      title: "El Internacional - Editar Item",
       layout: "admin",
       login,
       tipo,
+      item,
       pagActual,
       rutaBase:"restaurantes/",
       year: new Date().getFullYear(),
@@ -61,7 +66,6 @@ exports.vistaCrearItems = (req, res, next) =>{
 // Crear un item
 exports.crearItem = async (req, res, next) => {
     let restaurante = await Restaurante.findOne({_id:req.params.restaurante}).lean();
-    console.log(restaurante);
     // Verificar que no existen errores de validación
     const errores = validationResult(req);
     const messages = [];
@@ -74,13 +78,22 @@ exports.crearItem = async (req, res, next) => {
   
       // Enviar los errores a través de flash messages
       req.flash("messages", messages);
-  
-      res.redirect("restaurantes/"+restaurante.url+"/items");
+      res.redirect("/restaurantes/"+restaurante.url+"/items");
     } else {
       // Almacenar los valores del item
       try {
         const { nombre, descripcion, precio, restaurante_id } = req.body;
-        const imgurl = req.file.filename;
+        let imgurl = "";
+        if(req.file != undefined){
+         imgurl = req.file.filename;
+        }
+
+        let item = await Restaurante.findOne();
+        if(item.imgurl){
+          imgurl = item.imgurl;
+        }else{
+          imgurl = "no-image-default.png";
+        }
         const agregar = {
           $push: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
         }
@@ -92,7 +105,7 @@ exports.crearItem = async (req, res, next) => {
         });
         req.flash("messages", messages);
   
-        res.redirect("restaurantes/"+restaurante.url+"/items");
+        res.redirect("/restaurantes/"+restaurante.url+"/items");
       } catch (error) {
         console.log(error);
         messages.push({
@@ -100,7 +113,7 @@ exports.crearItem = async (req, res, next) => {
           alertType: "danger",
         });
         req.flash("messages", messages);
-        res.redirect("restaurantes/"+restaurante.url+"/items");
+        res.redirect("/restaurantes/"+restaurante.url+"/items");
       }
     }
   };
@@ -138,7 +151,12 @@ exports.crearRestaurante = async (req, res, next) => {
         costo_repartir,
         precio_minimo_orden,
          } = req.body;
-
+      let imagen = "";
+      if(req.file != undefined){
+        imagen = req.file.filename;
+      }else{
+        imagen = "no-image-default.png";
+      }
       await Restaurante.create({
         nombre,
         descripcion,
@@ -152,7 +170,7 @@ exports.crearRestaurante = async (req, res, next) => {
         delivery_radio,
         costo_repartir,
         precio_minimo_orden,
-        imagen_url: req.file.filename,
+        imagen_url: imagen,
         userId: req.user._id,
       });
 
@@ -177,7 +195,6 @@ exports.crearRestaurante = async (req, res, next) => {
 
 // Crear un restaurante
 exports.editarRestaurante = async (req, res, next) => {
-  console.log(req.body);
   // Verificar que no existen errores de validación
   const errores = validationResult(req);
   const messages = [];
@@ -212,6 +229,13 @@ exports.editarRestaurante = async (req, res, next) => {
 
          
         let filter = { _id: req.body._id };
+        let restaurante = await Restaurante.findOne(filter)
+        let imagen = "";
+         if(req.file != undefined){
+          imagen = req.file.filename;
+         }else{
+           imagen = restaurante.imagen_url
+         }
       await Restaurante.updateOne(filter,{nombre,
         descripcion,
         rating,
@@ -224,7 +248,7 @@ exports.editarRestaurante = async (req, res, next) => {
         delivery_radio,
         costo_repartir,
         precio_minimo_orden,
-        imagen_url: req.file.filename,
+        imagen_url: imagen,
         userId: req.user._id,});
 
       messages.push({
@@ -249,38 +273,38 @@ exports.editarRestaurante = async (req, res, next) => {
 
   // Permite subir un archivo (imagen) al servidor
 exports.subirImagen = (req, res, next) => {
-  upload(req, res, function (error) {
-    if (error) {
-      // Errores de Multer
-      if (error instanceof multer.MulterError) {
-        if (error.code === "LIMIT_FILE_SIZE") {
-          req.flash("messages", [
-            {
-              message:
-                "El tamaño del archivo es superior al límite. Máximo 300Kb",
-              alertType: "danger",
-            },
-          ]);
+  //verificar si existe archivo
+    upload(req, res, function (error) {
+      if (error) {
+        // Errores de Multer
+        if (error instanceof multer.MulterError) {
+          if (error.code === "LIMIT_FILE_SIZE") {
+            req.flash("messages", [
+              {
+                message:
+                  "El tamaño del archivo es superior al límite. Máximo 300Kb",
+                alertType: "danger",
+              },
+            ]);
+          } else {
+            req.flash("messages", [
+              { message: error.message, alertType: "danger" },
+            ]);
+          }
         } else {
+          // Errores creado por el usuario
           req.flash("messages", [
             { message: error.message, alertType: "danger" },
           ]);
         }
+        // Redireccionar y mostrar el error
+        res.redirect("/");
+        return;
       } else {
-        // Errores creado por el usuario
-        req.flash("messages", [
-          { message: error.message, alertType: "danger" },
-        ]);
+        // Archivo cargado correctamente
+        return next();
       }
-      // Redireccionar y mostrar el error
-      res.redirect("lista-restaurantes");
-      return;
-    } else {
-      // Archivo cargado correctamente
-      return next();
-    }
-  });
-  // }
+    });
 };
 
 

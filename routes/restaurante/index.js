@@ -78,8 +78,11 @@ module.exports = () => {
           res.send("Restaurantes No implementado!");
         });
 
-        // Rutas disponibles
+        // Ver todos los items
         router.get("/:id/items", restauranteController.vistaItems);
+
+        // vista modificar item
+        router.get("/:id/items/:url", restauranteController.vistaEditarItems);
 
         // Rutas disponibles
         router.post("/:restaurante/items/nuevo", restauranteController.subirImagen, 
@@ -100,12 +103,7 @@ module.exports = () => {
         ],
           restauranteController.crearItem);
         
-        router.get("/:restaurante/item/:url", async (req,res,next) =>{
-            //obtener restaurante por url
-            res.send("hola");
-          });
-
-        // Rutas disponibles
+        // crear item
         router.post("/:id/items/:url", restauranteController.subirImagen, 
         [
           check("nombre", "Debes ingresar el nombre del producto")
@@ -125,9 +123,10 @@ module.exports = () => {
           restauranteController.crearItem);
 
         // Rutas disponibles
-        router.post("/:id/items/:url/eliminar", async (req,res,next) =>{
-            await Restaurante.deleteOne({_id:req.params.id})
-            res.redirect("/restaurantes/lista-restaurantes");
+        router.post("/:url/eliminar", async (req,res,next) =>{
+            //await Restaurante.deleteOne({_id:req.params.url})
+            console.log(req.params);
+            res.redirect("/restaurantes/"+req.params.url+"/items");
         });
 
 
@@ -222,7 +221,7 @@ module.exports = () => {
         ],
         restauranteController.editarRestaurante);
 
-        // Rutas disponibles
+        // Formulario nuevo restaurante
         router.get("/nuevo", (req, res, next) => {
           let tipo = "";
           if (req.user != null) {
@@ -241,7 +240,8 @@ module.exports = () => {
             year: new Date().getFullYear(),
           });
         });
-        // Rutas disponibles
+
+        // Agregando nuevo restaurante
         router.post("/nuevo",
         restauranteController.subirImagen,
         [

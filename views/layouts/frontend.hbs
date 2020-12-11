@@ -26,7 +26,7 @@
     <div class="container">
 
       <!-- Brand -->
-      <a class="navbar-brand waves-effect" href="/home">
+      <a class="navbar-brand waves-effect" href="/inicio">
         <img src="/img/logo.png" alt="Logo" width="100">
       </a>
 
@@ -42,7 +42,7 @@
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
           <li class="nav-item {{# ifCond pagActual "Inicio"}}active{{/ifCond}}">
-            <a class="nav-link waves-effect" href="/home">Inicio
+            <a class="nav-link waves-effect" href="/inicio">Inicio
             </a>
           </li>
           {{# EachRol tipo "delivery" }}
@@ -54,8 +54,8 @@
           <li class="nav-item {{# ifCond pagActual "Admninistracion"}}active{{/ifCond}}">
             <a class="nav-link waves-effect" href="#">Panel Administracion</a>
             {{# ifCond pagActual "Admin" }}
-                <span class="sr-only">(current)</span>
-              {{/ifCond }}
+            <span class="sr-only">(current)</span>
+            {{/ifCond }}
           </li>
           {{/EachRol }}
         </ul>
@@ -64,9 +64,9 @@
         <ul class="navbar-nav nav-flex-icons">
           <li class="nav-item">
             <a class="nav-link waves-effect">
-              <span class="badge red z-depth-1 mr-1"> 1 </span>
+              <span class="badge red z-depth-1 mr-1"> 0 </span>
               <i class="fas fa-shopping-cart"></i>
-              <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+              <span class="clearfix d-none d-sm-inline-block"> Carrito </span>
             </a>
           </li>
           <li class="nav-item">
@@ -82,13 +82,13 @@
           {{# if login }}
           <li class="nav-item">
             <a href="/cerrar-sesion" class="nav-link border border-light rounded">
-              <i class="fa fa-window-close mr-2"></i>Cerrar Sesión
+              <i class="fa fa-window-close mr-2"></i>Cerrar sesión
             </a>
           </li>
           {{ else }}
           <li class="nav-item">
             <a href="" class="nav-link border border-light rounded" data-toggle="modal" data-target="#modalLoginForm">
-              <i class="fa fa-user mr-2"></i>Iniciar Sesion
+              <i class="fa fa-user mr-2"></i>Iniciar sesión
             </a>
           </li>
           {{/if}}
@@ -99,8 +99,10 @@
     </div>
   </nav>
   <!-- Navbar -->
+  <div class="container-fluid">
+    {{{ body   }}}
+  </div>
 
-  {{{ body   }}}
 
   <!-- SCRIPTS -->
   <!-- JQuery -->
