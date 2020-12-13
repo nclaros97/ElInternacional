@@ -17,64 +17,9 @@ module.exports = () => {
     if (req.user != null) {
       if (req.user.roles.includes("restaurante") && true) {
 
-        // Rutas disponibles
-        router.get("/perfil", (req, res, next) => {
-          let tipo = "";
-          if (req.user != null) {
-            tipo = req.user.roles;
-          }
-          let pagActual = 'Inicio';
-          let login = false;
-          if (req.user != undefined) { login = true }
-          res.render("administracion/restaurantes/perfil", {
-            title: "El Internacional - Perfil",
-            layout: "admin",
-            login,
-            tipo,
-            pagActual,
-            rutaBase: "restaurantes/",
-            year: new Date().getFullYear(),
-          });
-        });
-
-
+       
         // Rutas disponibles
         router.get("/ordenes", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.get("/all", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.get("/all-own", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.get("/orden/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.put("/aceptar-orden/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.put("/marcar-orden-listo/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.put("/cancelar-orden/:id", (req, res, next) => {
-          res.send("Restaurantes No implementado!");
-        });
-
-        // Rutas disponibles
-        router.put("/marcar-orden-entregada/:id", (req, res, next) => {
           res.send("Restaurantes No implementado!");
         });
 
@@ -84,52 +29,36 @@ module.exports = () => {
         // vista modificar item
         router.get("/:id/items/:url", restauranteController.vistaEditarItems);
 
+        // Crear item
+        router.post("/:id/items/nuevo/item", restauranteController.subirImagen,
+          [
+            check("nombre", "Debes ingresar el nombre del producto")
+              .not()
+              .isEmpty()
+              .escape(),
+            check("descripcion", "Debes ingresar la descripción del producto")
+              .not()
+              .isEmpty()
+              .escape(),
+            check("precio", "Debes ingresar el precio del producto")
+              .not()
+              .isEmpty()
+              .escape(),
+            check("precio", "Valor incorrecto en el precio del producto").isNumeric(),
+          ],
+          restauranteController.crearItem);
+
         //modificar item
-        router.post("/:id/item/:url", restauranteController.EditarItems);
+        router.post("/:id/items/:url",restauranteController.subirImagen, restauranteController.EditarItems);
 
-        // Rutas disponibles
-        router.post("/:restaurante/items/nuevo", restauranteController.subirImagen, 
-        [
-          check("nombre", "Debes ingresar el nombre del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("descripcion", "Debes ingresar la descripción del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("precio", "Debes ingresar el precio del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("precio", "Valor incorrecto en el precio del producto").isNumeric(),
-        ],
-          restauranteController.crearItem);
-        
-        // crear item
-        router.post("/:id/items/:url", restauranteController.subirImagen, 
-        [
-          check("nombre", "Debes ingresar el nombre del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("descripcion", "Debes ingresar la descripción del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("precio", "Debes ingresar el precio del producto")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("precio", "Valor incorrecto en el precio del producto").isNumeric(),
-        ],
-          restauranteController.crearItem);
 
-        // Rutas disponibles
-        router.post("/:url/eliminar", async (req,res,next) =>{
-            //await Restaurante.deleteOne({_id:req.params.url})
-            console.log(req.params);
-            res.redirect("/restaurantes/"+req.params.url+"/items");
+        // eliminar item
+        router.post("/:restaurante/items/:item/eliminarItem", async (req, res, next) => {
+          await Restaurante.deleteOne({_id:req.params.url})
+          
+          let item = await Restaurante.deleteOne({url:req.params.restaurante,items : {$elemMatch:{_id:req.params.item}}});
+
+          res.redirect("/restaurantes/" + req.params.url + "/items");
         });
 
 
@@ -164,7 +93,7 @@ module.exports = () => {
           if (req.user != undefined) { login = true }
 
           // Obtener todos los restaurantes disponibles
-          const restaurantes = await Restaurante.find({userId:req.user._id}).lean();
+          const restaurantes = await Restaurante.find({ userId: req.user._id }).lean();
           let rutaImg = `/public/uploads/items`;
           res.render("administracion/restaurantes/adminRestaurantes/restaurantes", {
             title: "El Internacional - Administracion de restaurantes",
@@ -179,9 +108,9 @@ module.exports = () => {
           });
         });
 
-        router.get("/:url", async (req,res,next) =>{
+        router.get("/:url", async (req, res, next) => {
           //obtener restaurante por url
-          const restaurante = await Restaurante.findOne({url: req.params.url}).lean();
+          const restaurante = await Restaurante.findOne({ url: req.params.url }).lean();
           let tipo = "";
           if (req.user != null) {
             tipo = req.user.roles;
@@ -204,27 +133,37 @@ module.exports = () => {
           });
         });
 
-        router.post("/:id/:accion", async (req,res,next) =>{
-          console.log(req.params);
-          return
-          if(req.params.accion == "eliminar"){
-            await Restaurante.deleteOne({_id:req.params.id})
+        router.post("/:id/:accion", async (req, res, next) => {
+          const messages = [];
+          if (req.params.accion == "eliminarRestaurante") {
+            const restaurante = Restaurante.findById(req.params.id);
+            if(restaurante){
+              await Restaurante.deleteOne({ _id: req.params.id })
+              messages.push({
+                message: "Restaurante eliminado correctamente!",
+                alertType: "success",
+              });
+              req.flash("messages", messages);
+            }else{
+              console.log("Error al borrar restaurante");
+            }
             res.redirect("/restaurantes/lista-restaurantes");
           }
         });
 
-        router.post("/editar",restauranteController.subirImagen,
-        [
-          check("nombre", "Debes ingresar el nombre del restaurante")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("descripcion", "Debes ingresar la descripción del restaurante")
-            .not()
-            .isEmpty()
-            .escape()
-        ],
-        restauranteController.editarRestaurante);
+        
+        router.post("/editar", restauranteController.subirImagen,
+          [
+            check("nombre", "Debes ingresar el nombre del restaurante")
+              .not()
+              .isEmpty()
+              .escape(),
+            check("descripcion", "Debes ingresar la descripción del restaurante")
+              .not()
+              .isEmpty()
+              .escape()
+          ],
+          restauranteController.editarRestaurante);
 
         // Formulario nuevo restaurante
         router.get("/nuevo", (req, res, next) => {
@@ -248,19 +187,19 @@ module.exports = () => {
 
         // Agregando nuevo restaurante
         router.post("/nuevo",
-        restauranteController.subirImagen,
-        [
-          check("nombre", "Debes ingresar el nombre del restaurante")
-            .not()
-            .isEmpty()
-            .escape(),
-          check("descripcion", "Debes ingresar la descripción del restaurante")
-            .not()
-            .isEmpty()
-            .escape()
-        ],
-        restauranteController.crearRestaurante
-          );
+          restauranteController.subirImagen,
+          [
+            check("nombre", "Debes ingresar el nombre del restaurante")
+              .not()
+              .isEmpty()
+              .escape(),
+            check("descripcion", "Debes ingresar la descripción del restaurante")
+              .not()
+              .isEmpty()
+              .escape()
+          ],
+          restauranteController.crearRestaurante
+        );
 
 
       } else {

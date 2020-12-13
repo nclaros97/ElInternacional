@@ -19,7 +19,7 @@
       <td><img src="/uploads/items/{{item.imgurl}}" alt="imagen del item" width="200"></td>
       <td>
         <a  href="items/{{ item.url }}" class="btn btn-info">Editar</a>
-        <form action="items/{{ item.url }}/eliminar" method="POST" class="btn-Eliminar">
+        <form action="items/{{item._id}}/eliminarItem" method="POST" class="btn-Eliminar">
 
         <button type="submit" class="btn btn-danger" >Eliminar</button>
         </form>

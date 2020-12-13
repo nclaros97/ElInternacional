@@ -24,7 +24,7 @@
           <div class="card-body px-lg-5 pt-0">
             <h1>Restaurante: {{restaurante.nombre}}</h1>
             <!-- Form -->
-            <form action="/restaurantes/{{restaurante._id}}/items/nuevo" method="POST" class="text-center"
+            <form action="items/nuevo/item" method="POST" class="text-center"
               style="color: #757575;" enctype="multipart/form-data">
               <input type="hidden" name="restaurante_id" value="{{restaurante._id}}">
               <div class="form-row mb-4">

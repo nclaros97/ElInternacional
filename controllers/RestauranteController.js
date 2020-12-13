@@ -66,12 +66,10 @@ exports.vistaEditarItems = async (req, res, next) =>{
     });
 };
 
-// Crear un item
+// editar un item
 exports.EditarItems = async (req, res, next) => {
-  console.log(restaurante);
-  return;
+  console.log("Editar Item");
   let restaurante = await Restaurante.findOne({url:req.params.id}).lean();
-  
   // Verificar que no existen errores de validación
   const errores = validationResult(req);
   const messages = [];
@@ -103,10 +101,10 @@ exports.EditarItems = async (req, res, next) => {
       const editar = {
         $set: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
       }
-      await Restaurante.updateOne({url:req.params.id,"items.url":req.params.url},editar);
+      await Restaurante.updateOne({url:req.params.id},editar,{arrayFilters:[{"items.url":req.params.url}]});
 
       messages.push({
-        message: "Item agregado correctamente!",
+        message: "Item modificado correctamente!",
         alertType: "success",
       });
       req.flash("messages", messages);
@@ -126,7 +124,9 @@ exports.EditarItems = async (req, res, next) => {
 
 // Crear un item
 exports.crearItem = async (req, res, next) => {
-    let restaurante = await Restaurante.findOne({_id:req.params.restaurante}).lean();
+    console.log("Crear item");
+    let restaurante = await Restaurante.findOne({url:req.params.id}).lean();
+    console.log(restaurante);
     // Verificar que no existen errores de validación
     const errores = validationResult(req);
     const messages = [];
@@ -160,7 +160,7 @@ exports.crearItem = async (req, res, next) => {
         const agregar = {
           $push: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
         }
-        await Restaurante.updateOne({_id:req.params.restaurante},agregar);
+        await Restaurante.updateOne({url:req.params.id},agregar);
   
         messages.push({
           message: "Item agregado correctamente!",

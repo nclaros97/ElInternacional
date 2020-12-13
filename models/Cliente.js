@@ -18,4 +18,4 @@ const carritoShemaShema = new mongoose.Schema({
     }]
 });
 
-module.exports = mongoose.model("Clientes", carritoShemaShema);
+module.exports = mongoose.model("Cliente", carritoShemaShema);
