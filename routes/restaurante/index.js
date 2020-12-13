@@ -205,6 +205,8 @@ module.exports = () => {
         });
 
         router.post("/:id/:accion", async (req,res,next) =>{
+          console.log(req.params);
+          return
           if(req.params.accion == "eliminar"){
             await Restaurante.deleteOne({_id:req.params.id})
             res.redirect("/restaurantes/lista-restaurantes");
