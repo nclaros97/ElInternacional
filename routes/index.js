@@ -40,15 +40,20 @@ router.get("/", async (req, res, next) =>  {
 });
 
 router.get("/inicio", async (req,res,next)=>{
+  let restaurantes;
+  let carritoItems;
   let tipo = "";
   if(req.user != null){
     tipo = req.user.roles;
   }
   let pagActual = 'Inicio';
   let login = false;
-  if(req.user != undefined){login=true}
-  let restaurantes = await Restaurantes.find().lean();
-  let carritoItems = await Carrito.findOne({userId:req.user._id}).lean();
+  if(req.user != undefined){
+    login=true;
+     restaurantes = await Restaurantes.find().lean();
+      carritoItems = await Carrito.findOne({userId:req.user._id}).lean();
+  }
+  
   res.render("cliente/inicio", {
     title: "El Internacional",
     layout: "frontend",
