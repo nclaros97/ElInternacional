@@ -95,4 +95,3 @@ app.listen(port, host, () => {
   console.log(`Servidor ejecutándose en el puerto ${port}`);
 });
 
-app.listen(process.env.PORT);
