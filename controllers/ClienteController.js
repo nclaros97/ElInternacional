@@ -14,15 +14,19 @@ const year = new Date().getFullYear();
 // Crear un item
 exports.agregarCarrito = async (req, res, next) => {
   console.log("Agregar Carrito");
-  
+  let carrito;
+  let carrito2;
+  carrito = await Carrito.findOne({ userId: req.user._id }).lean();
   if (carrito) {
     console.log(carrito);
+    
   } else {
     let userId = req.user._id;
 
     await Carrito.create({ userId });
+    carrito = await Carrito.findOne({ userId: req.user._id }).lean();
   }
-  const carrito = await Carrito.findOne({ userId: req.user._id }).lean();
+
   let item = await Restaurante.findOne({ _id: req.params.restaurante }, { items: { $elemMatch: { url: req.params.url } } }, { url: req.params.url }).populate("items").lean();
   let itemObtenido;
   if (item != undefined) {

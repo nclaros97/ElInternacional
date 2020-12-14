@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#centralModalNuevo">Nuevo
+<button type="button" class="list-group-item active waves-effec" data-toggle="modal" data-target="#centralModalNuevo">Nuevo
 </button>
 {{> showMessages messages}}
 
@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th scope="col">Nombre</th>
-      <th scope="col">Url</th>
+      <th scope="col">Descripción</th>
       <th scope="col">Imagen</th>
     </tr>
   </thead>
@@ -14,11 +14,11 @@
     {{#each restaurantes as |restaurante|}}
     <tr>
       <td>{{ restaurante.nombre }}</td>
-      <td><a href="">{{ restaurante.url }}</a></td>
+      <td><a href="">{{ restaurante.descripcion }}</a></td>
       <td><img src="/uploads/items/{{restaurante.imagen_url}}" alt="imagen del restaurante" width="200"></td>
       <td>
         <a  href="{{restaurante.url}}" class="btn btn-info">Editar</a>
-        <a  href="{{restaurante.url}}/items" class="btn btn-secondary">Items</a>
+        <a  href="{{restaurante.url}}/items" class="btn btn-secondary">Platillos</a>
         <form action="{{restaurante._id}}/eliminarRestaurante" method="post" class="btn-Eliminar">
         <button type="submit" class="btn btn-danger" >Eliminar</button>
         </form>

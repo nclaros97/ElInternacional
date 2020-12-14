@@ -72,3 +72,11 @@
     font-family: 'Engagement', cursive;
     font-size: 2.5rem;
   }
+
+  .mt-5{
+    margin-top: 4rem!important;
+  }
+
+  .custom-file-input:lang(en)~.custom-file-label::after {
+    content: "Buscar"!important;
+}
