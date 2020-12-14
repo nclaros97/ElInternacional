@@ -10,6 +10,7 @@ const restaurante = require("./restaurante");
 const Restaurantes = require("../models/Restaurantes");
 const mongoose = require("mongoose");
 const Restaurante = mongoose.model("Restaurantes");
+const Carrito = mongoose.model("Cliente");
 // Configura y mantiene todos los endpoints en el servidor
 const router = express.Router();
 
@@ -47,13 +48,14 @@ router.get("/inicio", async (req,res,next)=>{
   let login = false;
   if(req.user != undefined){login=true}
   let restaurantes = await Restaurantes.find().lean();
-
+  let carritoItems = await Carrito.findOne({userId:req.user._id}).lean();
   res.render("cliente/inicio", {
     title: "El Internacional",
     layout: "frontend",
     login,
     restaurantes,
     tipo,
+    cantidad: carritoItems ? carritoItems.detalleCarrito.length : 0,
     pagActual,
     year: new Date().getFullYear(),
   });

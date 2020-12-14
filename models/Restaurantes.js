@@ -97,11 +97,12 @@ restauranteSchema.pre("updateOne", function (next) {
       this._update.$push.items.url = `${url}-${shortid.generate()}`;
       this._update.$push.items.estado = 1;
     }
-    console.log(this._update.$set)
+    
     if(this._update.$set != undefined){
-      const url = slug(this._update.$set.items.nombre);
-      this._update.$set.items.url = `${url}-${shortid.generate()}`;
-      this._update.$set.items.estado = 1;
+      let data = this._update.$set;
+      const url = slug(data["items.$"].nombre);
+      data["items.$"].url = `${url}-${shortid.generate()}`;
+      data["items.$"].estado = 1;
     }
     
     

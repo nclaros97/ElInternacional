@@ -15,7 +15,7 @@
     {{#each restaurante.items as |item|}}
     <tr>
       <td>{{ item.nombre }}</td>
-      <td><a href=""></a></td>
+      <td><a href="">{{item.url}}</a></td>
       <td><img src="/uploads/items/{{item.imgurl}}" alt="imagen del item" width="200"></td>
       <td>
         <a  href="items/{{ item.url }}" class="btn btn-info">Editar</a>

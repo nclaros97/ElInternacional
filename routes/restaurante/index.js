@@ -54,11 +54,11 @@ module.exports = () => {
 
         // eliminar item
         router.post("/:restaurante/items/:item/eliminarItem", async (req, res, next) => {
-          await Restaurante.deleteOne({_id:req.params.url})
-          
-          let item = await Restaurante.deleteOne({url:req.params.restaurante,items : {$elemMatch:{_id:req.params.item}}});
-
-          res.redirect("/restaurantes/" + req.params.url + "/items");
+          const editar = {
+            $pop: {"items.$":{_id:req.params.item}}
+          }
+          await Restaurante.updateOne({"items._id":req.params.item},editar);
+          res.redirect("/restaurantes/" + req.params.restaurante + "/items");
         });
 
 

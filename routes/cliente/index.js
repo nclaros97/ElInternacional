@@ -14,10 +14,13 @@ const authController = require("../../controllers/authController");
 const router = express.Router();
 
 module.exports = () => {
-    // Rutas disponibles
-    router.get("/agregar-carrito/:url",(req, res, next) => {
-        res.send("No implementado!");
-      });
+  // Agregar producto al carrito
+  router.get("/agregar-carrito/:restaurante/:url", carritoController.agregarCarrito);
 
-    return router;
-    };
+  //Ver carrito
+  router.get("/carrito", carritoController.verCarrito);
+
+
+
+  return router;
+};

@@ -88,20 +88,28 @@ exports.EditarItems = async (req, res, next) => {
     try {
       const { nombre, descripcion, precio, restaurante_id } = req.body;
       let imgurl = "";
+      let item = await Restaurante.findOne({url:req.params.id},{items : {$elemMatch:{url:req.params.url}}},{url:req.params.url}).lean();
+      let itemObtenido;
+      if(item != undefined){
+      itemObtenido =item.items[0]
+      };
       if(req.file != undefined){
        imgurl = req.file.filename;
+      }else{
+        console.log(itemObtenido.imgurl);
+        if(itemObtenido.imgurl){
+          imgurl = itemObtenido.imgurl;
+        }else{
+          imgurl = "no-image-default.png";
+        }
       }
 
-      let item = await Restaurante.findOne();
-      if(item.imgurl){
-        imgurl = item.imgurl;
-      }else{
-        imgurl = "no-image-default.png";
-      }
+      
+      
       const editar = {
-        $set: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
+        $set: {"items.$":{nombre,descripcion,precio,restaurante_id,imgurl}}
       }
-      await Restaurante.updateOne({url:req.params.id},editar,{arrayFilters:[{"items.url":req.params.url}]});
+      await Restaurante.updateOne({"items.url":req.params.url},editar);
 
       messages.push({
         message: "Item modificado correctamente!",

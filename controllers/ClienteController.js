@@ -13,59 +13,52 @@ const year = new Date().getFullYear();
 
 // Crear un item
 exports.agregarCarrito = async (req, res, next) => {
-    console.log("Agregar Carrito");
-    let restaurante = await Restaurante.findOne({url:req.params.id}).lean();
+  console.log("Agregar Carrito");
+  const carrito = await Carrito.findOne({ userId: req.user._id }).lean();
+  if (carrito) {
+    console.log(carrito);
+  } else {
+    let userId = req.user._id;
 
-    // Verificar que no existen errores de validación
-    const errores = validationResult(req);
-    const messages = [];
-  
-    // Si hay errores
-    if (!errores.isEmpty()) {
-      errores.array().map((error) => {
-        messages.push({ message: error.msg, alertType: "danger" });
-      });
-  
-      // Enviar los errores a través de flash messages
-      req.flash("messages", messages);
-      res.redirect("/restaurantes/"+restaurante.url+"/items");
-    } else {
-      // Almacenar los valores del item
-      try {
-        const { nombre, descripcion, precio, restaurante_id } = req.body;
-        let imgurl = "";
-        if(req.file != undefined){
-         imgurl = req.file.filename;
-        }else{
-          let item = await Restaurante.findOne();
-        if(item.imgurl){
-          imgurl = item.imgurl;
-        }else{
-          imgurl = "no-image-default.png";
-        }
-        }
-
-        
-        const agregar = {
-          $push: {items:{nombre,descripcion,precio,restaurante_id,imgurl}}
-        }
-        await Restaurante.updateOne({url:req.params.id},agregar);
-  
-        messages.push({
-          message: "Item agregado correctamente!",
-          alertType: "success",
-        });
-        req.flash("messages", messages);
-  
-        res.redirect("/restaurantes/"+restaurante.url+"/items");
-      } catch (error) {
-        console.log(error);
-        messages.push({
-          message: error,
-          alertType: "danger",
-        });
-        req.flash("messages", messages);
-        res.redirect("/restaurantes/"+restaurante.url+"/items");
-      }
-    }
+    await Carrito.create({ userId });
+  }
+  let item = await Restaurante.findOne({ _id: req.params.restaurante }, { items: { $elemMatch: { url: req.params.url } } }, { url: req.params.url }).populate("items").lean();
+  let itemObtenido;
+  if (item != undefined) {
+    itemObtenido = item.items[0]
   };
+  console.log(itemObtenido);
+  let itemId = itemObtenido._id;
+  let cantidad = 1;
+  let fechaIngreso = Date.now();
+  let lastUpdate = Date.now();
+  const agregar = {
+    $push: { detalleCarrito: { itemId, cantidad, fechaIngreso, lastUpdate } }
+  }
+  await Carrito.updateOne({ _id: carrito._id }, agregar);
+  let restaurante = await Restaurante.findOne({ _id: req.params.restaurante });
+  res.redirect("/" + restaurante.url);
+};
+
+exports.verCarrito = async (req, res, next) => {
+
+  let tipo = "";
+  if (req.user != null) {
+    tipo = req.user.roles;
+  }
+  let pagActual = 'Inicio';
+  let login = false;
+  if (req.user != undefined) { login = true }
+  const Itemscarrito = await Carrito.findOne({ userId: req.user._id }).lean();
+  console.log(Itemscarrito)
+  res.render("cliente/carrito", {
+    title: "El Internacional - Carrito",
+    layout: "frontend",
+    login,
+    tipo,
+    Itemscarrito,
+    pagActual,
+    rutaBase: "clientes/",
+    year: new Date().getFullYear(),
+  });
+};
