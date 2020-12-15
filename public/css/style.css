@@ -111,3 +111,14 @@ header,
 .titulo-landingpage{
   color: #000!important;
 }
+
+@media (max-width: 740px){
+  .view {
+   height: auto;
+}
+}
+
+.imagenPlatillo{
+  width: 100%;
+  height: 100%;
+}

@@ -16,7 +16,7 @@
                     <div class="card align-items-center">
                         <!-- Card image -->
                         <div class="view overlay">
-                            <img src="/uploads/items/{{item.imgurl}}" class="card-img-top" alt="">
+                            <img src="/uploads/items/{{item.imgurl}}" class="card-img-top imagenPlatillo" alt="{{ item.nombre }}">
                             <a>
                                 <div class="mask rgba-white-slight"></div>
                             </a>
@@ -25,16 +25,14 @@
                         <!-- Card content -->
                         <div class="card-body text-center">
                             <!-- Category & Title -->
-                            <a href="{{item.url}}" class="grey-text">
-                                <h6>{{ item.nombre }}</h6>
+                            <a href="{{item.url}}" class="dark-grey-text">
+                                <h5 ><strong>{{ item.nombre }}</strong></h5>
                             </a>
-                            <h5 class="mb-3">
-                                <strong>
+                            <h6 class="grey-text">
                                     <a href="{{item.url}}" class="dark-grey-text">{{ item.descripcion }} <br>
                                     </a>
-                                </strong>
                                <p style="color: rgb(160, 36, 36);"> L {{ item.precio }}</p><a  href="/clientes/agregar-carrito/{{ item.restaurante_id }}/{{ item.url }}" class="btn btn-info">Comprar</a>
-                            </h5>
+                            </h6>
                         </div>
                         <!-- Card content -->
                     </div>
