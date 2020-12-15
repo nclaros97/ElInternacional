@@ -1,3 +1,47 @@
-{{#each Itemscarrito.detalleCarrito as |detalle| }}
-{{ detalle.ItemId }}
-{{/each }}
+<div class="row principal">
+    <div class="col-lg-3 col-xs-12"></div>
+    <div class="col-lg-6 col-xs-12">
+        <!--Section: Content-->
+        <section class="dark-grey-text text-center">
+            <!-- Grid row -->
+            <div class="row">
+                <h1>Carrito</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Platillo</th>
+                            <th scope="col">Imagen</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each mostrarDatos as |platillo|}}
+                        <tr>
+                            <td>{{ platillo.platillo }}</td>
+                            <td><img src="/uploads/items/{{platillo.imgurl}}" alt="imagen del platillo"
+                                    width="200"></td>
+                            <td><a href="">{{ platillo.cantidad }}</a></td>
+                            <td><a href="">{{ platillo.precio }}</a></td>
+                            <td><a href="">{{ platillo.total }}</a></td>
+                            <td>
+                                <a href="{{restaurante.url}}" class="btn btn-info"><i class="fas fa-plus"></i></a>
+                                <form action="{{restaurante._id}}/eliminarRestaurante" method="post"
+                                    class="btn-Eliminar">
+                                    <button type="submit" class="btn btn-danger"><i class="fas fa-minus"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- Grid row -->
+
+        </section>
+        <!--Section: Content-->
+    </div>
+    <div class="col-lg-3 col-xs-12"></div>
+</div>

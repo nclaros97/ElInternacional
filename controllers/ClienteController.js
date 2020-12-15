@@ -7,7 +7,7 @@ const Carrito = mongoose.model("Cliente");
 const { validationResult } = require("express-validator");
 const multer = require("multer");
 const shortid = require("shortid");
-
+let datosCarrito = require("../viewModels/carrito");
 const year = new Date().getFullYear();
 
 
@@ -32,7 +32,6 @@ exports.agregarCarrito = async (req, res, next) => {
   if (item != undefined) {
     itemObtenido = item.items[0]
   };
-  console.log(itemObtenido);
   let itemId = itemObtenido._id;
   let cantidad = 1;
   let fechaIngreso = Date.now();
@@ -55,13 +54,31 @@ exports.verCarrito = async (req, res, next) => {
   let login = false;
   if (req.user != undefined) { login = true }
   const Itemscarrito = await Carrito.findOne({ userId: req.user._id }).lean();
-  console.log(Itemscarrito)
+  if(Itemscarrito){
+    var mostrar = new Array();
+    Itemscarrito.detalleCarrito.forEach(async platillo =>{
+      let platilloRestaurante = await Restaurante.findOne({"items._id":platillo.itemId},{items :{$elemMatch:{_id:platillo.itemId}}}).populate("items").lean();
+
+      datosCarrito = {
+        platillo:platilloRestaurante.items[0].nombre,
+        cantidad:platillo.cantidad,
+        precio: platilloRestaurante.items[0].precio,
+        total: platilloRestaurante.items[0].precio*platillo.cantidad,
+        imagen: platilloRestaurante.items[0].imgurl
+      };
+      mostrar.push(datosCarrito);
+      
+      
+    }); 
+  }
+  let carritoItems = await Carrito.findOne({userId:req.user._id}).lean();
   res.render("cliente/carrito", {
     title: "El Internacional - Carrito",
     layout: "frontend",
     login,
     tipo,
-    Itemscarrito,
+    cantidad: carritoItems ? carritoItems.detalleCarrito.length : 0,
+    mostrarDatos:await mostrar,
     pagActual,
     rutaBase: "clientes/",
     year: new Date().getFullYear(),
