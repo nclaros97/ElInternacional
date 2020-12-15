@@ -96,7 +96,7 @@ router.get("/delivery", (req,res,next)=>{
   let login = false;
   if(req.user != undefined){login=true}
   res.render("administracion/delivery/inicio", {
-    title: "El Internacional - Administracion DElivery",
+    title: "El Internacional - Administracion Delivery",
     layout: "admin",
     login,
     tipo,

@@ -301,9 +301,16 @@
             <input type="password" id="orangeForm-pass" class="form-control validate" name="password" required>
             <label data-error="Inválido" data-success="Válido" for="orangeForm-pass">Contraseña</label>
           </div>
-          <input type="text" id="orangeForm-tipo-cliente" class="form-control validate" name="tipo" value="cliente"
-            hidden>
+          <input type="hidden" id="orangeForm-tipo-cliente" class="form-control validate" name="tipo" value="cliente"
+            >
+          <p>¿Ya eres miembro?
+            <a onclick="cerrarModalRegistro()" href="" data-toggle="modal"
+            data-target="#modalLoginForm">Inicia sesión
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </a>
+          </p>
         </div>
+        
         <div class="modal-footer d-flex justify-content-center">
           <button class="btn btn-deep-orange">Registrar</button>
         </div>

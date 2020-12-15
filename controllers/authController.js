@@ -28,14 +28,18 @@ exports.cerrarSesion = (req, res, next) => {
 
   req.flash("messages", messages);
 
-  return res.redirect("/inicio");
+  return res.redirect("/");
 };
 
 // Mostrar el formulario de restablecer la contraseña
 exports.formularioRestablecerPassword = (req, res, next) => {
-  // console.log(res.locals.messages.messages[0].messages[0].message);
+  let tipo = "";
+  if (req.user != null) {
+    tipo = req.user.roles;
+  }
   res.render("autenticacion/restablecerPassword", {
-    layout: "auth",
+    layout: "frontend",
+    tipo,
     typePage: "register-page",
     signButtonValue: "/iniciar-sesion",
     signButtonText: "Iniciar sesión",
@@ -49,7 +53,6 @@ exports.enviarToken = async (req, res, next) => {
   // Obtener la direccción de correo electrónico
   const { email } = req.body;
   const messages = [];
-
   // Buscar el usuario
   try {
     const usuario = await Usuario.findOne({ email });
@@ -70,13 +73,10 @@ exports.enviarToken = async (req, res, next) => {
     // El usuario existe, generar un token y una fecha de vencimiento
     usuario.token = crypto.randomBytes(20).toString("hex");
     usuario.expira = Date.now() + 3600000;
-
     // Guardar los cambios
     await usuario.save();
-
     // Generar la URL de restablecer contraseña
     const resetUrl = `http://${req.headers.host}/olvide-password/${usuario.token}`;
-
     try {
       // Enviar la notificación al correo electrónico del usuario
       const sendMail = await enviarCorreo.enviarCorreo({
@@ -114,6 +114,7 @@ exports.enviarToken = async (req, res, next) => {
 
 // Mostrar el formulario de cambio de contraseña
 exports.formularioNuevoPassword = async (req, res, next) => {
+
   const messages = [];
   // Buscar el usuario por medio del token que se envía como parámetro
   try {
@@ -134,15 +135,16 @@ exports.formularioNuevoPassword = async (req, res, next) => {
 
       req.flash("messages", messages);
 
-      res.redirect("/olvide-password");
+      res.redirect("olvide-password");
     }
-
+    let tipo = "";
+    if (req.user != null) {
+      tipo = req.user.roles;
+    }
     // Mostrar el formulario de nuevo password
     res.render("autenticacion/nuevoPassword", {
-      layout: "auth",
-      typePage: "register-page",
-      signButtonValue: "/iniciar-sesion",
-      signButtonText: "Iniciar sesión",
+      layout: "frontend",
+      tipo,
       year: new Date().getFullYear(),
     });
   } catch (error) {
@@ -154,7 +156,7 @@ exports.formularioNuevoPassword = async (req, res, next) => {
 
     req.flash("messages", messages);
 
-    res.redirect("/olvide-password");
+    res.redirect("olvide-password");
   }
 };
 
@@ -197,7 +199,7 @@ exports.almacenarNuevaPassword = async (req, res, next) => {
       alertType: "success",
     });
     req.flash("messages", messages);
-    res.redirect("/iniciar-sesion");
+    res.redirect("/");
   } catch (error) {
     messages.push({
       message:

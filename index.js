@@ -29,7 +29,7 @@ app.engine("hbs", exphbs({ defaultLayout: "frontend", extname: ".hbs" }));
 app.set("view engine", "hbs");
 
 // Definir ruta para archivos estáticos.
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 var hbs = exphbs.create({});
 

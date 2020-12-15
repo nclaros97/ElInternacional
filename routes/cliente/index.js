@@ -19,8 +19,5 @@ module.exports = () => {
 
   //Ver carrito
   router.get("/carrito", carritoController.verCarrito);
-
-
-
   return router;
 };
