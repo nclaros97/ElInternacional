@@ -59,10 +59,8 @@ module.exports = () => {
 
         // eliminar item
         router.post("/:restaurante/items/:item/eliminarItem", async (req, res, next) => {
-          const editar = {
-            $pop: {"items.$":{_id:req.params.item}}
-          }
-          await Restaurante.updateOne({"items._id":req.params.item},editar);
+          
+          await Restaurante.updateOne({"items._id":req.params.item},{$pull:{"detalleCarrito.$._id":req.params.item}});
           res.redirect("/restaurantes/" + req.params.restaurante + "/items");
         });
 
