@@ -26,5 +26,8 @@ module.exports = () => {
   //quitar un platillo del carrito
   router.post("/quitaruno/:id", carritoController.quitarUno);
 
+  //crear orden
+  router.post("/crear-orden", carritoController.crearOrden);
+
   return router;
 };

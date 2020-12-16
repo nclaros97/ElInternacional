@@ -19,7 +19,7 @@ exports.agregarCarrito = async (req, res, next) => {
   carrito = await Carrito.findOne({ userId: req.user._id }).lean();
   if (carrito) {
     console.log(carrito);
-    
+
   } else {
     let userId = req.user._id;
 
@@ -54,33 +54,33 @@ exports.verCarrito = async (req, res, next) => {
   let login = false;
   if (req.user != undefined) { login = true }
   const Itemscarrito = await Carrito.findOne({ userId: req.user._id }).lean();
-  if(Itemscarrito){
+  if (Itemscarrito) {
     var mostrar = new Array();
-    Itemscarrito.detalleCarrito.forEach(async platillo =>{
-      let platilloRestaurante = await Restaurante.findOne({"items._id":platillo.itemId},{items :{$elemMatch:{_id:platillo.itemId}}}).populate("items").lean();
-      if(platilloRestaurante){
+    Itemscarrito.detalleCarrito.forEach(async platillo => {
+      let platilloRestaurante = await Restaurante.findOne({ "items._id": platillo.itemId }, { items: { $elemMatch: { _id: platillo.itemId } } }).populate("items").lean();
+      if (platilloRestaurante) {
         datosCarrito = {
-          platillo:platilloRestaurante.items[0].nombre,
-          cantidad:platillo.cantidad,
+          platillo: platilloRestaurante.items[0].nombre,
+          cantidad: platillo.cantidad,
           precio: platilloRestaurante.items[0].precio,
-          total: platilloRestaurante.items[0].precio*platillo.cantidad,
+          total: platilloRestaurante.items[0].precio * platillo.cantidad,
           imagen: platilloRestaurante.items[0].imgurl,
-          _id:platilloRestaurante.items[0]._id
+          _id: platilloRestaurante.items[0]._id
         };
         mostrar.push(datosCarrito);
       }
-      
-      
-    }); 
+
+
+    });
   }
-  let carritoItems = await Carrito.findOne({userId:req.user._id}).lean();
+  let carritoItems = await Carrito.findOne({ userId: req.user._id }).lean();
   res.render("cliente/carrito", {
     title: "El Internacional - Carrito",
     layout: "frontend",
     login,
     tipo,
     cantidad: carritoItems ? carritoItems.detalleCarrito.length : 0,
-    mostrarDatos:await mostrar,
+    mostrarDatos: await mostrar,
     pagActual,
     rutaBase: "clientes/",
     year: new Date().getFullYear(),
@@ -90,7 +90,7 @@ exports.verCarrito = async (req, res, next) => {
 // Agregar un platillo
 exports.agregarUno = async (req, res, next) => {
   console.log("Agregar 1 platillo al carrito existente");
-  await Carrito.updateOne({"detalleCarrito.itemId":req.params.id},{$inc:{"detalleCarrito.$.cantidad":1}});
+  await Carrito.updateOne({ "detalleCarrito.itemId": req.params.id }, { $inc: { "detalleCarrito.$.cantidad": 1 } });
 
   res.redirect("/clientes/carrito");
 };
@@ -98,7 +98,26 @@ exports.agregarUno = async (req, res, next) => {
 // Quitar 1 platillo
 exports.quitarUno = async (req, res, next) => {
   console.log("Quitar un platillo del carrito");
-  const platillo = await Carrito.updateOne({"detalleCarrito.itemId":req.params.id},{$inc:{"detalleCarrito.$.cantidad":-1}});
+  const platillo = await Carrito.updateOne({ "detalleCarrito.itemId": req.params.id }, { $inc: { "detalleCarrito.$.cantidad": -1 } });
+
+  res.redirect("/clientes/carrito");
+};
+
+// Crear Orden
+exports.crearOrden = async (req, res, next) => {
+  console.log("Agregar Orden");
+  let masDeUnRestaurante = false;
+  const messages = [];
   
+
+
+    messages.push({
+      message:
+        "¡Error al crear la orden!",
+      alertType: "danger",
+    });
+
+    req.flash("messages", messages);
+
   res.redirect("/clientes/carrito");
 };
