@@ -67,23 +67,31 @@ router.get("/inicio", async (req,res,next)=>{
 });
 
 router.get("/restaurantes", (req,res,next)=>{
-  let tipo = "";
-  let rutaBase = "restaurantes/"
-  if(req.user != null){
-    tipo = req.user.roles;
+  if(req.user){
+    if(req.user.roles.includes('restaurante')){
+      let tipo = "";
+    let rutaBase = "restaurantes/"
+    if(req.user != null){
+      tipo = req.user.roles;
+    }
+    let pagActual = 'Inicio';
+    let login = false;
+    if(req.user != undefined){login=true}
+    res.render("administracion/restaurantes/inicio", {
+      title: "El Internacional - Administracion Restaurantes",
+      layout: "admin",
+      login,
+      tipo,
+      rutaBase,
+      pagActual,
+      year: new Date().getFullYear(),
+    });
+    }else{
+      res.redirect("/")
+    }
+  }else{
+    res.redirect("/")
   }
-  let pagActual = 'Inicio';
-  let login = false;
-  if(req.user != undefined){login=true}
-  res.render("administracion/restaurantes/inicio", {
-    title: "El Internacional - Administracion Restaurantes",
-    layout: "admin",
-    login,
-    tipo,
-    rutaBase,
-    pagActual,
-    year: new Date().getFullYear(),
-  });
 });
 
 router.get("/delivery", (req,res,next)=>{

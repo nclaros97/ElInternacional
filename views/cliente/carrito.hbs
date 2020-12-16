@@ -20,15 +20,15 @@
                         {{#each mostrarDatos as |platillo|}}
                         <tr>
                             <td>{{ platillo.platillo }}</td>
-                            <td><img src="/uploads/items/{{platillo.imgurl}}" alt="imagen del platillo"
-                                    width="200"></td>
+                            <td><img src="/uploads/items/{{platillo.imagen}}" alt="imagen del platillo"
+                                    width="200" height="150"></td>
                             <td><a href="">{{ platillo.cantidad }}</a></td>
                             <td><a href="">{{ platillo.precio }}</a></td>
                             <td><a href="">{{ platillo.total }}</a></td>
                             <td>
-                                <a href="" class="btn btn-info"><i class="fas fa-plus"></i></a>
-                                <form action="" method="post"
-                                    class="btn-Eliminar">
+                                <a href="agregaruno/{{platillo._id}}" class="btn btn-info"><i class="fas fa-plus"></i></a>
+                                <form action="quitaruno/{{platillo._id}}" method="POST"
+                                    class="btn-Eliminar" >
                                     <button type="submit" class="btn btn-danger"><i class="fas fa-minus"></i></button>
                                 </form>
                             </td>
@@ -36,7 +36,7 @@
                         {{/each}}
                     </tbody>
                 </table>
-
+                <a href="agregaruno/{{platillo._id}}" class="btn btn-info">Crear Orden</a>
             </div>
             <!-- Grid row -->
 

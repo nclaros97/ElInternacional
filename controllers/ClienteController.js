@@ -58,15 +58,17 @@ exports.verCarrito = async (req, res, next) => {
     var mostrar = new Array();
     Itemscarrito.detalleCarrito.forEach(async platillo =>{
       let platilloRestaurante = await Restaurante.findOne({"items._id":platillo.itemId},{items :{$elemMatch:{_id:platillo.itemId}}}).populate("items").lean();
-
-      datosCarrito = {
-        platillo:platilloRestaurante.items[0].nombre,
-        cantidad:platillo.cantidad,
-        precio: platilloRestaurante.items[0].precio,
-        total: platilloRestaurante.items[0].precio*platillo.cantidad,
-        imagen: platilloRestaurante.items[0].imgurl
-      };
-      mostrar.push(datosCarrito);
+      if(platilloRestaurante){
+        datosCarrito = {
+          platillo:platilloRestaurante.items[0].nombre,
+          cantidad:platillo.cantidad,
+          precio: platilloRestaurante.items[0].precio,
+          total: platilloRestaurante.items[0].precio*platillo.cantidad,
+          imagen: platilloRestaurante.items[0].imgurl,
+          _id:platilloRestaurante.items[0]._id
+        };
+        mostrar.push(datosCarrito);
+      }
       
       
     }); 
@@ -83,4 +85,20 @@ exports.verCarrito = async (req, res, next) => {
     rutaBase: "clientes/",
     year: new Date().getFullYear(),
   });
+};
+
+// Agregar un platillo
+exports.agregarUno = async (req, res, next) => {
+  console.log("Agregar 1 platillo al carrito existente");
+  await Carrito.updateOne({"detalleCarrito.itemId":req.params.id},{$inc:{"detalleCarrito.$.cantidad":1}});
+
+  res.redirect("/clientes/carrito");
+};
+
+// Quitar 1 platillo
+exports.quitarUno = async (req, res, next) => {
+  console.log("Quitar un platillo del carrito");
+  const platillo = await Carrito.updateOne({"detalleCarrito.itemId":req.params.id},{$inc:{"detalleCarrito.$.cantidad":-1}});
+  
+  res.redirect("/clientes/carrito");
 };

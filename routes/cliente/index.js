@@ -19,5 +19,12 @@ module.exports = () => {
 
   //Ver carrito
   router.get("/carrito", carritoController.verCarrito);
+
+  //sumar 1 platillo mas
+  router.get("/agregaruno/:id", carritoController.agregarUno);
+
+  //quitar un platillo del carrito
+  router.post("/quitaruno/:id", carritoController.quitarUno);
+
   return router;
 };

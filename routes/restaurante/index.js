@@ -17,7 +17,12 @@ module.exports = () => {
     if (req.user != null) {
       if (req.user.roles.includes("restaurante") && true) {
 
-       
+       // Rutas disponibles
+       router.get("/", (req, res, next) => {
+         console.log("entro");
+        res.send("Restaurantes No implementado!");
+      });
+
         // Rutas disponibles
         router.get("/ordenes", (req, res, next) => {
           res.send("Restaurantes No implementado!");
